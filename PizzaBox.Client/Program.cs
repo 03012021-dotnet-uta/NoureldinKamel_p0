@@ -15,7 +15,9 @@ namespace PizzaBox.Client
         {
             // FreddyPizza s = new FreddyPizza();
             // s.Name = "some pizza store";
-            var storeSingleton = new StoreSingleton();
+            var storeSingleton = StoreSingleton.Instance;
+            // storeSingleton.WriteStoresToXml(storeSingleton.Stores);
+            // var stores = storeSingleton.ReadStoresFromXml();
             foreach (var store in storeSingleton.Stores)
             {
                 Console.WriteLine(store);
