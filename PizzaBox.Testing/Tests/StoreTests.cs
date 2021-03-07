@@ -1,4 +1,5 @@
 using PizzaBox.Domain.Models;
+using PizzaBox.Domain.Singletons;
 using Xunit;
 
 namespace PizzaBox.Testing.Tests
@@ -9,8 +10,8 @@ namespace PizzaBox.Testing.Tests
         public void Test_ChicagoStore()
         {
             // arrange
-            var sut = new ChicagoPizza();
-            var expected = "Chicago's Pizza";
+            var sut = new ChicagoStore();
+            var expected = "Chicago's Pizza Store";
 
             // act -- part that we want to test
             var actual = sut.Name;
@@ -20,13 +21,11 @@ namespace PizzaBox.Testing.Tests
         }
 
         [Theory]
-        [InlineData("Chicago's Pizza")]
-        [InlineData("")]
+        [InlineData("Chicago's Pizza Store")]
         public void Test_ChicagoStore1(string expected)
         {
             // arrange
-            var sut = new ChicagoPizza();
-            // expected = "Chicago Store";
+            var sut = new ChicagoStore();
 
             // act -- part that we want to test
             var actual = sut.Name;

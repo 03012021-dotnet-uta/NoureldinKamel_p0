@@ -10,7 +10,7 @@ namespace PizzaBox.Domain.Singletons
 {
     public class StoreSingleton
     {
-        public List<ChicagoPizza> Stores { get; set; }
+        public List<ChicagoStore> Stores { get; set; }
 
         public static StoreSingleton Instance
         {
@@ -47,7 +47,7 @@ namespace PizzaBox.Domain.Singletons
                 //     new DetroitPizza(),
                 //     new NewYorkPizza()
                 // };
-                Stores = fs.ReadFromXml<ChicagoPizza>().ToList();
+                Stores = fs.ReadFromXml<ChicagoStore>().ToList();
             }
 
             // WriteStoresToXml(s);

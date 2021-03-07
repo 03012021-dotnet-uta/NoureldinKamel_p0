@@ -4,11 +4,13 @@ namespace PizzaBox.Domain.Models
 {
     public enum ToppingType
     {
-        Mozirilla, ShedarCheese, Pepperoni, Pineapple, Tomatoes, Mushroom, Onion
+        Mozirilla, ShedarCheese, Pepperoni, Pineapple, Tomatoes, Mushroom, Onion, Meat, Chicken
     }
 
-    public class Topping : AComponent
+    public class Topping : AComponent<ToppingType>
     {
-        public ToppingType Type { get; set; }
+        public Topping(ToppingType type) : base(type)
+        {
+        }
     }
 }

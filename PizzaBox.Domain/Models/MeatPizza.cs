@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using PizzaBox.Domain.Models;
+using PizzaBox.Domain.Singletons;
 
 namespace PizzaBox.Domain.Abstracts
 {
@@ -8,29 +9,26 @@ namespace PizzaBox.Domain.Abstracts
     // public enum Topping { pepperoni, Onions, Tomatoes, Pineapples, Chicken, Meat, Mushrooms, CheddarCheese, MozirillaCheese }
     public class MeatPizza : APizza
     {
-        protected override void AddCrust()
+        public MeatPizza(SizeType size) : base(size)
         {
-            PizzaCrust = new Crust();
         }
 
-        protected override void AddSize()
+        protected override void AddDefaultCrust()
         {
-            PizzaSize = new Size();
+            PizzaCrust = new Crust(CrustType.Thick);
         }
 
-        protected override void AddToppings()
+        protected override void AddSize(SizeType size)
+        {
+            PizzaSize = new Size(size);
+        }
+
+        protected override void AddDefaultToppings()
         {
             ToppingList = new List<Topping>()
             {
-                new Topping()
-                {
-                    Name = "Meat",
-                    Price = 1
-                },
-                new Topping()
-                {
-                    Name = ""
-                }
+                new Topping(ToppingType.Meat),
+                new Topping(ToppingType.Onion),
             };
         }
         // public MeatPizza()

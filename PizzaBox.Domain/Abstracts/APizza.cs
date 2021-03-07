@@ -13,21 +13,43 @@ namespace PizzaBox.Domain.Abstracts
         public List<Topping> ToppingList { get; set; }
         public string Name { get; set; } // property
 
-        public APizza()
+        public APizza(SizeType size)
         {
-            FactoryMethod();
+            FactoryMethod(size);
         }
 
-        private void FactoryMethod()
+        private void FactoryMethod(SizeType size)
         {
-            AddCrust();
-            AddSize();
-            AddToppings();
+            AddDefaultCrust();
+            AddSize(size);
+            AddDefaultToppings();
         }
 
-        protected abstract void AddCrust();
-        protected abstract void AddSize();
-        protected abstract void AddToppings();
+        protected abstract void AddDefaultCrust();
+        protected abstract void AddSize(SizeType size);
+        protected abstract void AddDefaultToppings();
 
+        public float CalculateTotalPrice()
+        {
+            float total = PizzaCrust.Price;
+            total += PizzaSize.Price;
+            foreach (var item in ToppingList)
+            {
+                total += item.Price;
+            }
+            return total;
+        }
+
+        public override string ToString()
+        {
+            string s = "A pizza with toppings: ";
+            foreach (var item in ToppingList)
+            {
+                s += "\n\t" + item;
+            }
+            s += "\nwith crust: " + PizzaCrust;
+            s += "\nof size: " + PizzaSize;
+            return s;
+        }
     }
 }

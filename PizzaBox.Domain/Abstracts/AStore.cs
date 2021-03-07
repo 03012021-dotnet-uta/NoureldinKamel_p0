@@ -6,7 +6,7 @@ namespace PizzaBox.Domain.Abstracts
     {
         public string Name { get; set; } // property
 
-        public List<AOrder> OrderList { get; set; }
+        public List<Order> OrderList { get; set; }
 
         public override string ToString()
         {

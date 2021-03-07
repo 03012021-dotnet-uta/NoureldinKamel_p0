@@ -26,23 +26,23 @@ The application is centered around the interaction of 4 main objects:
 
 ### store
 
-- [required] there should exist at least 2 stores for a customer to choose from
-- [required] each store should be able to view any and all of their placed orders
+- ✔️ [required] there should exist at least 2 stores for a customer to choose from
+- [required] each store should be able to view any and [all ✔️] of their placed orders
 - [required] each store should be able to view any and all of their sales (weekly, monthly, quarterly)
 
 ### order
 
 - [required] each order must be able to modify its collection of pizzas
-- [required] each order must be able to compute its pricing
+- ✔️ [required] each order must be able to compute its pricing
 - [required] each order must be limited to a total pricing of no more than $250
 - [required] each order must be limited to a collection of pizzas of no more than 50
 
 ### pizza
 
-- [required] each pizza must be able to have a crust
-- [required] each pizza must be able to have a size
-- [required] each pizza must be able to have toppings
-- [required] each pizza must be able to compute its pricing
+- ✔️ [required] each pizza must be able to have a crust
+- ✔️ [required] each pizza must be able to have a size
+- ✔️ [required] each pizza must be able to have toppings
+- ✔️ [required] each pizza must be able to compute its pricing
 - [required] each pizza must have no less than 2 default toppings
 - [required] each pizza must have no more than 5 total toppings
 
@@ -74,8 +74,8 @@ The application is centered around the interaction of 4 main objects:
 - with either custom or preset pizzas
 - if custom
 - select crust, size and toppings
-- if preset
-- select pizza and its size
+- ✔️ if preset
+- ✔️ select pizza and its size
 - see a tally of my order
 - add or remove more pizzas
 - and checkout when complete with latest order

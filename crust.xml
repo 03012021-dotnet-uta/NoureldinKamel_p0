@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfDictEntryOfCrustType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DictEntryOfCrustType>
+    <Key>Pan</Key>
+    <Value>1.7</Value>
+  </DictEntryOfCrustType>
+  <DictEntryOfCrustType>
+    <Key>Thick</Key>
+    <Value>1.5</Value>
+  </DictEntryOfCrustType>
+  <DictEntryOfCrustType>
+    <Key>Thin</Key>
+    <Value>1</Value>
+  </DictEntryOfCrustType>
+  <DictEntryOfCrustType>
+    <Key>Stuffed</Key>
+    <Value>2.1</Value>
+  </DictEntryOfCrustType>
+</ArrayOfDictEntryOfCrustType>

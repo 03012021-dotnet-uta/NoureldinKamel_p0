@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfDictEntryOfToppingType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DictEntryOfToppingType>
+    <Key>Mozirilla</Key>
+    <Value>0.3</Value>
+  </DictEntryOfToppingType>
+  <DictEntryOfToppingType>
+    <Key>Mushroom</Key>
+    <Value>0.3</Value>
+  </DictEntryOfToppingType>
+  <DictEntryOfToppingType>
+    <Key>Onion</Key>
+    <Value>0.3</Value>
+  </DictEntryOfToppingType>
+  <DictEntryOfToppingType>
+    <Key>Pepperoni</Key>
+    <Value>0.3</Value>
+  </DictEntryOfToppingType>
+  <DictEntryOfToppingType>
+    <Key>Pineapple</Key>
+    <Value>0.3</Value>
+  </DictEntryOfToppingType>
+  <DictEntryOfToppingType>
+    <Key>ShedarCheese</Key>
+    <Value>0.3</Value>
+  </DictEntryOfToppingType>
+  <DictEntryOfToppingType>
+    <Key>Tomatoes</Key>
+    <Value>0.3</Value>
+  </DictEntryOfToppingType>
+  <DictEntryOfToppingType>
+    <Key>Meat</Key>
+    <Value>0.6</Value>
+  </DictEntryOfToppingType>
+  <DictEntryOfToppingType>
+    <Key>Chicken</Key>
+    <Value>0.6</Value>
+  </DictEntryOfToppingType>
+</ArrayOfDictEntryOfToppingType>
