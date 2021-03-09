@@ -34,8 +34,8 @@ The application is centered around the interaction of 4 main objects:
 
 - [required] each order must be able to modify its collection of pizzas
 - ✔️ [required] each order must be able to compute its pricing
-- [required] each order must be limited to a total pricing of no more than $250
-- [required] each order must be limited to a collection of pizzas of no more than 50
+- ✔️ [required] each order must be limited to a total pricing of no more than $250
+- ✔️ [required] each order must be limited to a collection of pizzas of no more than 50
 
 ### pizza
 
@@ -43,8 +43,8 @@ The application is centered around the interaction of 4 main objects:
 - ✔️ [required] each pizza must be able to have a size
 - ✔️ [required] each pizza must be able to have toppings
 - ✔️ [required] each pizza must be able to compute its pricing
-- [required] each pizza must have no less than 2 default toppings
-- [required] each pizza must have no more than 5 total toppings
+- ✔️ [required] each pizza must have no less than 2 default toppings
+- ✔️ [required] each pizza must have no more than 5 total toppings
 
 ### customer
 

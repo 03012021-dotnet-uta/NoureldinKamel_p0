@@ -69,25 +69,25 @@ namespace PizzaBox.Storing
             return dict;
         }
 
-        public void WriteToXml2<T>(FileType type, IDictionary<Enum, float> data) where T : Enum
-        {
-            string path = GetPath(type);
-            // Type t = enumType.GetType();
-            List<DictEntry<Enum>> entryList = new List<DictEntry<Enum>>();
-            foreach (KeyValuePair<Enum, float> pair in data)
-            {
-                entryList.Add(new DictEntry<Enum>()
-                {
-                    Key = pair.Key,
-                    Value = data[pair.Key]
-                });
-            }
-            using (var writer = new StreamWriter(path))
-            {
-                var serializer = new XmlSerializer(typeof(List<DictEntry<T>>));
-                serializer.Serialize(writer, entryList);
-            }
-        }
+        // public void WriteToXml2<T>(FileType type, IDictionary<Enum, float> data) where T : Enum
+        // {
+        //     string path = GetPath(type);
+        //     // Type t = enumType.GetType();
+        //     List<DictEntry<Enum>> entryList = new List<DictEntry<Enum>>();
+        //     foreach (KeyValuePair<Enum, float> pair in data)
+        //     {
+        //         entryList.Add(new DictEntry<Enum>()
+        //         {
+        //             Key = pair.Key,
+        //             Value = data[pair.Key]
+        //         });
+        //     }
+        //     using (var writer = new StreamWriter(path))
+        //     {
+        //         var serializer = new XmlSerializer(typeof(List<DictEntry<T>>));
+        //         serializer.Serialize(writer, entryList);
+        //     }
+        // }
 
         private string GetPath(FileType type)
         {

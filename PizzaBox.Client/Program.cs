@@ -11,20 +11,36 @@ namespace PizzaBox.Client
     {
         static void Main(string[] args)
         {
-            PlayWithStores();
+            // PlayWithStores();
+            TestOrder();
+        }
+
+        public void testStoreSingleton()
+        {
+            var storeSingleton = StoreSingleton.Instance;
+            foreach (var store in storeSingleton.Stores)
+            {
+                Console.WriteLine(store);
+            }
+        }
+
+        public static void TestOrder()
+        {
+            var order = new Order();
+            var pizza1 = new MeatPizza(SizeType.Large);
+            var pizza2 = new MeatPizza(SizeType.Large);
+            order.AddPizza(pizza1);
+            order.AddPizza(pizza2);
+            // var dict = order.ViewPizzas();
+            Console.WriteLine(order);
         }
 
         public static void PlayWithStores()
         {
             // FreddyPizza s = new FreddyPizza();
             // s.Name = "some pizza store";
-            // var storeSingleton = StoreSingleton.Instance;
             // storeSingleton.WriteStoresToXml(storeSingleton.Stores);
             // var stores = storeSingleton.ReadStoresFromXml();
-            // foreach (var store in storeSingleton.Stores)
-            // {
-            //     Console.WriteLine(store);
-            // }
             // Console.WriteLine(storeSingleton.Stores[0].Name);
 
             // Dictionary<FileType, float> testdic = new Dictionary<FileType, float>();
@@ -41,18 +57,17 @@ namespace PizzaBox.Client
             // Console.WriteLine("price of large pizza: " + priceManager.getPrice(SizeType.Large));
             // Console.WriteLine("price of chicken topping: " + priceManager.getPrice(ToppingType.Chicken));
 
-            var pizza = new MeatPizza(SizeType.Large);
-            Console.WriteLine(pizza);
-            Console.WriteLine("pizza price is: " + pizza.CalculateTotalPrice());
-            var order = new Order();
-            order.AddPizza(pizza);
-            Console.WriteLine("\nadding first pizza");
-            Console.WriteLine(order.ToString());
-            // Console.WriteLine("And its total is: " + order.CalculateTotalCost());
-            order.AddPizza(pizza);
-            Console.WriteLine("\nadding second pizza");
-            Console.WriteLine(order.ToString());
-            DateTime dt = new DateTime();
+            // var pizza = new MeatPizza(SizeType.Large);
+            // Console.WriteLine(pizza);
+            // Console.WriteLine("pizza price is: " + pizza.CalculateTotalPrice());
+            // var order = new Order();
+            // order.AddPizza(pizza);
+            // Console.WriteLine("\nadding first pizza");
+            // Console.WriteLine(order.ToString());
+            // // Console.WriteLine("And its total is: " + order.CalculateTotalCost());
+            // order.AddPizza(pizza);
+            // Console.WriteLine("\nadding second pizza");
+            // Console.WriteLine(order.ToString());
             // Console.WriteLine("And its total is: " + order.CalculateTotalCost());
         }
     }

@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfChicagoPizza xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <ChicagoPizza>
-    <Name>Chicago's Pizza - TEXAS</Name>
-  </ChicagoPizza>
-  <ChicagoPizza>
-    <Name>Chicago's Pizza - COLORADO</Name>
-  </ChicagoPizza>
-  <ChicagoPizza>
-    <Name>Chicago's Pizza - FLORIDA</Name>
-  </ChicagoPizza>
-  <ChicagoPizza>
-    <Name>Chicago's Pizza - CALIFORNIA</Name>
-  </ChicagoPizza>
-</ArrayOfChicagoPizza>
+<ArrayOfAStore xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <AStore xsi:type="FreddyStore">
+    <Name>Freddy's Pizza Store</Name>
+  </AStore>
+  <AStore xsi:type="ChicagoStore">
+    <Name>Chicago's Pizza Store</Name>
+  </AStore>
+  <AStore xsi:type="DetroitStore">
+    <Name>Detroit's Pizza Store</Name>
+  </AStore>
+  <AStore xsi:type="NewYorkStore">
+    <Name>NewYork's Pizza Store</Name>
+  </AStore>
+</ArrayOfAStore>
