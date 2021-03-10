@@ -48,10 +48,10 @@ namespace PizzaBox.Domain.Singletons
             return customer;
         }
 
-        public Customer AddPizzaToOrder(Order order)
-        {
+        // public Customer AddPizzaToOrder(Order order)
+        // {
 
-        }
+        // }
 
         private string ReadStringInput()
         {
