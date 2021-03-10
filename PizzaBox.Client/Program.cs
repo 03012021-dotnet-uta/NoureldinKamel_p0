@@ -12,7 +12,23 @@ namespace PizzaBox.Client
         static void Main(string[] args)
         {
             // PlayWithStores();
-            TestOrder();
+            // TestOrder(); 
+            // TestPointer();
+            TestTime();
+        }
+
+        public static void TestTime()
+        {
+            // DateTime t1 = new DateTime(2001, 3, 10, 22, 30, 0);
+            // 12:08:50
+            DateTime t2 = new DateTime(2021, 3, 9, 0, 8, 0);
+            Console.WriteLine("now: " + DateTime.Now);
+            Console.WriteLine("t2: " + t2);
+            TimeSpan timeSpan = DateTime.Now.Subtract(t2);
+            TimeSpan timespan2 = new TimeSpan(1, 0, 0, 0);
+            Console.WriteLine("now - t2: " + timeSpan.TotalHours);
+            Console.WriteLine("2 hour timespan: " + timespan2);
+            Console.WriteLine("is now-2 greater than 2hrs? " + (Math.Abs(timeSpan.TotalHours) > timespan2.TotalHours));
         }
 
         public void testStoreSingleton()
@@ -33,6 +49,15 @@ namespace PizzaBox.Client
             order.AddPizza(pizza2);
             // var dict = order.ViewPizzas();
             Console.WriteLine(order);
+        }
+
+        public static void TestPointer()
+        {
+            APizza p = new MeatPizza(SizeType.Large);
+            List<APizza> l = new List<APizza>();
+            l.Add(p);
+            p = null;
+            Console.WriteLine(l[0]);
         }
 
         public static void PlayWithStores()

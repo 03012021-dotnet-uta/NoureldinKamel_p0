@@ -54,6 +54,11 @@ namespace PizzaBox.Domain.Singletons
             // WriteStoresToXml(s);
         }
 
+        public List<AStore> GetAllStores()
+        {
+            return new List<AStore>(Stores);
+        }
+
         public void addStore()
         {
 

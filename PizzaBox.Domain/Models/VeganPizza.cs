@@ -8,26 +8,18 @@ namespace PizzaBox.Domain.Abstracts
     // public enum Topping { pepperoni, Onions, Tomatoes, Pineapples, Chicken, Meat, Mushrooms, CheddarCheese, MozirillaCheese }
     public class VeganPizza : APizza
     {
-        public VeganPizza(SizeType size) : base(size)
-        {
-        }
-        protected override void AddDefaultCrust()
-        {
-            // PizzaCrust = new Crust();
-        }
 
-        protected override void AddSize(SizeType size)
+        // protected override void AddDefaultToppings()
+        // {
+        //     ToppingList = new List<Topping>()
+        //     {
+        //         // new Topping(),
+        //         // new Topping(),
+        //     };
+        // }
+        private List<ToppingType> DefaultToppings = new List<ToppingType>() { ToppingType.Tomatoes, ToppingType.Onion, ToppingType.Mushroom };
+        public VeganPizza(Size size, Crust crust) : base(size, crust)
         {
-            // PizzaSize = new Size();
-        }
-
-        protected override void AddDefaultToppings()
-        {
-            ToppingList = new List<Topping>()
-            {
-                // new Topping(),
-                // new Topping(),
-            };
         }
     }
 }

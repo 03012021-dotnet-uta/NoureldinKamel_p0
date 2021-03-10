@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using PizzaBox.Domain.Models;
+using PizzaBox.Domain.Singletons;
 
 namespace PizzaBox.Domain.Abstracts
 {
@@ -8,26 +9,121 @@ namespace PizzaBox.Domain.Abstracts
     // public enum Topping { pepperoni, Onions, Tomatoes, Pineapples, Chicken, Meat, Mushrooms, CheddarCheese, MozirillaCheese }
     public abstract class APizza
     {
-        public Size PizzaSize { get; set; }
-        public Crust PizzaCrust { get; set; }
-        public List<Topping> ToppingList { get; set; }
+        private List<ToppingType> DefaultToppings;
+        private Size PizzaSize { get; set; }
+        private Crust PizzaCrust { get; set; }
+        private List<Topping> ToppingList { get; set; }
         public string Name { get; set; } // property
 
-        public APizza(SizeType size)
+        private int MAX_TOPPING = 5;
+
+        private int MIN_TOPPING = 2;
+
+        public APizza(Size size, Crust crust)
         {
-            FactoryMethod(size);
+            FactoryMethod(size, crust);
         }
 
-        private void FactoryMethod(SizeType size)
+        private void FactoryMethod(Size size, Crust crust)
         {
-            AddDefaultCrust();
-            AddSize(size);
+            SetCrust(crust);
+            SetSize(size);
             AddDefaultToppings();
         }
 
-        protected abstract void AddDefaultCrust();
-        protected abstract void AddSize(SizeType size);
-        protected abstract void AddDefaultToppings();
+        // protected abstract void AddCrust(Crust crust);
+        // protected abstract void AddSize(Size size);
+        protected void AddDefaultToppings()
+        {
+            foreach (var topType in DefaultToppings)
+            {
+                float price = PriceManager.Instance.getPrice(topType);
+                ToppingList.Add(new Topping(topType) { Price = price });
+
+                // foreach (var toppingObject in toppingPriceList)
+                // {
+                //     if (toppingObject.Type == topType)
+                //     {
+                //         ToppingList.Add(toppingObject);
+                //         break;
+                //     }
+                // }
+
+            }
+        }
+
+        public bool SetCrust(Crust crust)
+        {
+            PizzaCrust = crust;
+            return true;
+        }
+
+        public bool SetSize(Size size)
+        {
+            PizzaSize = size;
+            return true;
+        }
+
+        public bool CanAddMoreTopping()
+        {
+            bool b = ToppingList.Count < 5;
+            if (!b)
+            {
+                System.Console.WriteLine("Reached maximum toppings of " + MAX_TOPPING);
+            }
+            return ToppingList.Count < 5;
+        }
+
+        public bool AddTopping(Topping topping)
+        {
+            if (CanAddMoreTopping() && !DoesToppingExist(topping, true))
+            {
+                ToppingList.Add(topping);
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemoveTopping(Topping topping)
+        {
+            if (DoesToppingExist(topping, false))
+            {
+                return ToppingList.Remove(topping);
+            }
+            System.Console.WriteLine("topping " + topping + "was not added yet");
+            return false;
+        }
+
+        public List<Topping> GetAddedToppings()
+        {
+            return new List<Topping>(ToppingList);
+        }
+
+        public bool DoesToppingExist(Topping topping, bool print)
+        {
+            foreach (var t in ToppingList)
+            {
+                if (t.Type == topping.Type)
+                {
+                    if (print)
+                    {
+                        System.Console.WriteLine("topping: " + t + " already added");
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsPizzaToppingsOk()
+        {
+            if (ToppingList.Count > MAX_TOPPING || ToppingList.Count < MIN_TOPPING)
+            {
+                System.Console.WriteLine("A pizza must contain between " + MAX_TOPPING + " and " + MIN_TOPPING + " toppings");
+                return false;
+            }
+            return true;
+        }
 
         public float CalculateTotalPrice()
         {
@@ -39,6 +135,7 @@ namespace PizzaBox.Domain.Abstracts
             }
             return total;
         }
+
 
         public override string ToString()
         {

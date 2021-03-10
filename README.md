@@ -48,9 +48,9 @@ The application is centered around the interaction of 4 main objects:
 
 ### customer
 
-- [required] must be able to view its order history
-- [required] must be able to only order from 1 location in a 24-hour period with no reset
-- [required] must be able to only order once in a 2-hour period
+- ✔️ [required] must be able to view its order history
+- ✔️ [required] must be able to only order from 1 location in a 24-hour period with no reset
+- ✔️ [required] must be able to only order once in a 2-hour period
 
 ## technologies
 
@@ -68,19 +68,19 @@ The application is centered around the interaction of 4 main objects:
 ## as a customer
 
 - should be able to launch application
-- should be able to view all stores
-- should be able to select a store
+- ✔️ should be able to view all stores
+- ✔️ should be able to select a store
 - should be to place an order
 - with either custom or preset pizzas
 - if custom
 - select crust, size and toppings
 - ✔️ if preset
 - ✔️ select pizza and its size
-- see a tally of my order
-- add or remove more pizzas
+- ✔️ see a tally of my order
+- ✔️ add or remove more pizzas
 - and checkout when complete with latest order
 - see my order history
-- make a new order
+- ✔️ make a new order
 
 ## store story
 

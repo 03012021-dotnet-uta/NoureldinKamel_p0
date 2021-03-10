@@ -23,6 +23,21 @@ namespace PizzaBox.Domain.Singletons
             }
         }
 
+        public Dictionary<ToppingType, float> GetToppings()
+        {
+            return new Dictionary<ToppingType, float>(_toppingPriceDictionary);
+        }
+
+        public Dictionary<SizeType, float> GetSizes()
+        {
+            return new Dictionary<SizeType, float>(_sizePriceDictionary);
+        }
+
+        public Dictionary<CrustType, float> GetCrusts()
+        {
+            return new Dictionary<CrustType, float>(_crustPriceDictionary);
+        }
+
         private static PriceManager _instance;
 
         private PriceManager()

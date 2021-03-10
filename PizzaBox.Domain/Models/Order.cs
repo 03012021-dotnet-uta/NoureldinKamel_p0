@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System;
+using PizzaBox.Domain.Abstracts;
 
-namespace PizzaBox.Domain.Abstracts
+namespace PizzaBox.Domain.Models
 {
     public class Order
     {
@@ -10,6 +11,9 @@ namespace PizzaBox.Domain.Abstracts
         public float TotalPrice { get; set; }
 
         public DateTime date { get; set; }
+
+        public AStore Store { get; set; }
+
         private int MAX_PIZZA_COUNT = 50;
         private int MAX_ORDER_PRICE = 250;
 
@@ -54,6 +58,7 @@ namespace PizzaBox.Domain.Abstracts
         {
             if (TotalPrice + pizzaPrice > MAX_ORDER_PRICE)
             {
+                Console.WriteLine("the total price must be below " + MAX_ORDER_PRICE);
                 return false;
             }
             else
@@ -72,6 +77,7 @@ namespace PizzaBox.Domain.Abstracts
         {
             if (Pizzas.Count + countAdded > MAX_PIZZA_COUNT)
             {
+                Console.WriteLine("The maximum number of pizzas is " + MAX_PIZZA_COUNT);
                 return false;
             }
             else
@@ -80,7 +86,6 @@ namespace PizzaBox.Domain.Abstracts
             }
         }
 
-
         /// <summary>
         /// returns true if toppings > 5 and < 2
         /// </summary>
@@ -88,11 +93,7 @@ namespace PizzaBox.Domain.Abstracts
         /// <returns></returns>
         private bool IsPizzaToppingsOk(APizza pizza)
         {
-            if (pizza.ToppingList.Count > 5 || pizza.ToppingList.Count < 2)
-            {
-                return false;
-            }
-            return true;
+            return pizza.IsPizzaToppingsOk();
         }
 
         // public float CalculateTotalCost()
