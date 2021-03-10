@@ -132,6 +132,8 @@ namespace PizzaBox.Domain.Singletons
             bool loop = true;
             while (loop)
             {
+                Console.WriteLine("your current pizza is: ");
+                Console.WriteLine(pizza);
                 PrintPizzaCustomizeMenu();
                 var actionChoice = ReadIntInput();
                 switch (actionChoice)
@@ -142,8 +144,6 @@ namespace PizzaBox.Domain.Singletons
                     case 3: loop = false; break;
                     default: break;
                 }
-                Console.WriteLine("your current pizza is: ");
-                Console.WriteLine(pizza);
             }
             return pizza;
         }
@@ -178,6 +178,7 @@ namespace PizzaBox.Domain.Singletons
         public APizza AddTopping(APizza pizza)
         {
             List<Topping> toppings = GetAllToppings();
+            PrintPizza(pizza);
             Console.WriteLine("available toppings are: ");
 
             for (int i = 0; i < toppings.Count; i++)
@@ -232,6 +233,7 @@ namespace PizzaBox.Domain.Singletons
             showPizza.AddDefaultToppings();
             showPizza.AddDefaultCrust();
             showPizza.AddDefaultSize();
+            Console.WriteLine("show pizza: " + showPizza);
             return showPizza;
             // showPizzas.
             // foreach (var pizza in showPizzas)

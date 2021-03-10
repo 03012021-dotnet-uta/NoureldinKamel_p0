@@ -26,11 +26,16 @@ namespace PizzaBox.Domain.Abstracts
 
         public APizza()
         {
-
+            ToppingList = new List<Topping>();
+            InitializeToppings();
         }
+
+        protected abstract void InitializeToppings();
 
         public APizza(Size size, Crust crust)
         {
+            ToppingList = new List<Topping>();
+            InitializeToppings();
             FactoryMethod(size, crust);
         }
 
@@ -45,8 +50,10 @@ namespace PizzaBox.Domain.Abstracts
         // protected abstract void AddSize(Size size);
         public void AddDefaultToppings()
         {
+            System.Console.WriteLine("the toppings are: " + DefaultToppings[0]);
             foreach (var topType in DefaultToppings)
             {
+                System.Console.WriteLine("topType:" + topType);
                 float price = PriceManager.Instance.getPrice(topType);
                 ToppingList.Add(new Topping(topType) { Price = price });
 
@@ -101,6 +108,7 @@ namespace PizzaBox.Domain.Abstracts
             if (CanAddMoreTopping() && !DoesToppingExist(topping, true))
             {
                 ToppingList.Add(topping);
+                System.Console.WriteLine("added topping: " + topping.Type);
                 return true;
             }
             return false;

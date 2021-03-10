@@ -18,6 +18,10 @@ namespace PizzaBox.Domain.Abstracts
 
         public CustomPizza(Size size, Crust crust) : base(size, crust)
         {
+        }
+
+        protected override void InitializeToppings()
+        {
             DefaultToppings = new List<ToppingType>();
         }
 

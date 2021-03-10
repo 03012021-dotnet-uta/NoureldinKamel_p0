@@ -24,6 +24,10 @@ namespace PizzaBox.Domain.Abstracts
         // private List<ToppingType> 
         public VeggiePizza(Size size, Crust crust) : base(size, crust)
         {
+        }
+
+        protected override void InitializeToppings()
+        {
             DefaultToppings = new List<ToppingType>() { ToppingType.Tomatoes, ToppingType.ShedarCheese, ToppingType.Mushroom, ToppingType.Onion };
         }
     }
