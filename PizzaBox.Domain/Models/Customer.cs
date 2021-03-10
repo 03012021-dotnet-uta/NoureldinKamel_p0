@@ -84,11 +84,11 @@ namespace PizzaBox.Domain.Models
         {
             FinishedOrders = new List<Order>()
             {
-                new Order(),
-                new Order(),
-                new Order(),
-                new Order(),
-                new Order()
+                // new Order(),
+                // new Order(),
+                // new Order(),
+                // new Order(),
+                // new Order()
             };
             return true;
         }

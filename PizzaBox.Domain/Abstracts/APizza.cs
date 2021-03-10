@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using PizzaBox.Domain.Models;
 using PizzaBox.Domain.Singletons;
 
@@ -6,18 +7,27 @@ namespace PizzaBox.Domain.Abstracts
 {
     // public enum Size { Small, Medium, Large }
     // public enum Crust { Thick, Thin, Pan }
-    // public enum Topping { pepperoni, Onions, Tomatoes, Pineapples, Chicken, Meat, Mushrooms, CheddarCheese, MozirillaCheese }
+    // public enum Topping { pepperoni, Onions, Tomatoes, Pineapples, Chicken, Meat, Mushrooms, CheddarCheese, MozirillaCheese }    [XmlInclude(typeof(NewYorkStore))]
+    [XmlInclude(typeof(MeatPizza))]
+    [XmlInclude(typeof(VeggiePizza))]
+    [XmlInclude(typeof(VeganPizza))]
+    [XmlInclude(typeof(CustomPizza))]
     public abstract class APizza
     {
-        private List<ToppingType> DefaultToppings;
-        private Size PizzaSize { get; set; }
-        private Crust PizzaCrust { get; set; }
-        private List<Topping> ToppingList { get; set; }
+        protected List<ToppingType> DefaultToppings = new List<ToppingType>();
+        protected Size PizzaSize { get; set; }
+        protected Crust PizzaCrust { get; set; }
+        protected List<Topping> ToppingList { get; set; }
         public string Name { get; set; } // property
 
         private int MAX_TOPPING = 5;
 
         private int MIN_TOPPING = 2;
+
+        public APizza()
+        {
+
+        }
 
         public APizza(Size size, Crust crust)
         {
@@ -33,7 +43,7 @@ namespace PizzaBox.Domain.Abstracts
 
         // protected abstract void AddCrust(Crust crust);
         // protected abstract void AddSize(Size size);
-        protected void AddDefaultToppings()
+        public void AddDefaultToppings()
         {
             foreach (var topType in DefaultToppings)
             {
@@ -50,6 +60,18 @@ namespace PizzaBox.Domain.Abstracts
                 // }
 
             }
+        }
+
+        public void AddDefaultCrust()
+        {
+            float price = PriceManager.Instance.getPrice(CrustType.Thick);
+            SetCrust(new Crust(CrustType.Thick) { Price = price });
+        }
+
+        public void AddDefaultSize()
+        {
+            float price = PriceManager.Instance.getPrice(SizeType.Medium);
+            SetSize(new Size(SizeType.Medium) { Price = price });
         }
 
         public bool SetCrust(Crust crust)

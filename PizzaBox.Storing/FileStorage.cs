@@ -7,7 +7,7 @@ namespace PizzaBox.Storing
 {
     public enum FileType
     {
-        Stores, Crusts, Sizes, Toppings
+        Stores, Crusts, Sizes, Toppings, Pizza
     }
     public class FileStorage
     {
@@ -15,18 +15,21 @@ namespace PizzaBox.Storing
         private readonly string _toppingFilePath = @"topping.xml";
         private readonly string _crustFilePath = @"crust.xml";
         private readonly string _storeFilePath = @"store.xml";
-        public void WriteToXml<T>(List<T> data) where T : class
+        private readonly string _pizzaFilePath = @"pizza.xml";
+        public void WriteToXml<T>(FileType fileType, List<T> data) where T : class
         {
-            using (var writer = new StreamWriter(_storeFilePath))
+            string path = GetPath(fileType);
+            using (var writer = new StreamWriter(path))
             {
                 var serializer = new XmlSerializer(typeof(List<T>));
                 serializer.Serialize(writer, data);
             }
         }
 
-        public IEnumerable<T> ReadFromXml<T>() where T : class
+        public IEnumerable<T> ReadListFromXml<T>(FileType fileType) where T : class
         {
-            using (var reader = new StreamReader(_storeFilePath))
+            string path = GetPath(fileType);
+            using (var reader = new StreamReader(path))
             {
                 var serializer = new XmlSerializer(typeof(List<T>));
                 return serializer.Deserialize(reader) as IEnumerable<T>;
@@ -101,6 +104,8 @@ namespace PizzaBox.Storing
                     return _storeFilePath;
                 case FileType.Sizes:
                     return _sizeFilePath;
+                case FileType.Pizza:
+                    return _pizzaFilePath;
                 default:
                     return @"default.xml";
             }

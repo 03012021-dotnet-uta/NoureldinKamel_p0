@@ -9,10 +9,16 @@ namespace PizzaBox.Domain.Abstracts
     // public enum Topping { pepperoni, Onions, Tomatoes, Pineapples, Chicken, Meat, Mushrooms, CheddarCheese, MozirillaCheese }
     public class CustomPizza : APizza
     {
-        private List<ToppingType> DefaultToppings = new List<ToppingType>();
+        // private List<ToppingType> DefaultToppings = new List<ToppingType>();
+
+        public CustomPizza()
+        {
+
+        }
 
         public CustomPizza(Size size, Crust crust) : base(size, crust)
         {
+            DefaultToppings = new List<ToppingType>();
         }
 
 

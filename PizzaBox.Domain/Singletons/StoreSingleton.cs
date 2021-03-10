@@ -47,7 +47,7 @@ namespace PizzaBox.Domain.Singletons
                 //     new DetroitStore(),
                 //     new NewYorkStore()
                 // };
-                Stores = fs.ReadFromXml<AStore>().ToList();
+                Stores = fs.ReadListFromXml<AStore>(FileType.Stores).ToList();
                 // fs.WriteToXml<AStore>(Stores);
             }
 

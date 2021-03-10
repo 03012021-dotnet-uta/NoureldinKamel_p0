@@ -17,9 +17,14 @@ namespace PizzaBox.Domain.Abstracts
         //         // new Topping(),
         //     };
         // }
-        private List<ToppingType> DefaultToppings = new List<ToppingType>() { ToppingType.Tomatoes, ToppingType.Onion, ToppingType.Mushroom };
+        public VeganPizza()
+        {
+
+        }
+        // private List<ToppingType> 
         public VeganPizza(Size size, Crust crust) : base(size, crust)
         {
+            DefaultToppings = new List<ToppingType>() { ToppingType.Tomatoes, ToppingType.Onion, ToppingType.Mushroom };
         }
     }
 }

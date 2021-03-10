@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PizzaBox.Domain.Abstracts;
 using PizzaBox.Domain.Models;
 using PizzaBox.Domain.Singletons;
@@ -14,7 +15,35 @@ namespace PizzaBox.Client
             // PlayWithStores();
             // TestOrder(); 
             // TestPointer();
-            TestTime();
+            // TestTime();
+            // SavePizzaTypes();
+            // TestSavedPizzas();
+            TestOrder();
+        }
+
+        public static void TestSavedPizzas()
+        {
+            FileStorage fs = new FileStorage();
+            List<APizza> pizzas = fs.ReadListFromXml<APizza>(FileType.Pizza).ToList();
+            foreach (var item in pizzas)
+            {
+                Console.WriteLine(item.Name);
+            }
+        }
+
+        public static void SavePizzaTypes()
+        {
+            FileStorage fs = new FileStorage();
+            float sp = PriceManager.Instance.getPrice(SizeType.Large);
+            float cp = PriceManager.Instance.getPrice(CrustType.Thick);
+            var pizzas = new List<APizza>()
+            {
+                new MeatPizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Meat Pizza"},
+                new VeganPizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Vegan Pizza"},
+                new VeggiePizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Veggie Pizza"},
+                new CustomPizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Custom Pizza"}
+            };
+            fs.WriteToXml<APizza>(FileType.Pizza, pizzas);
         }
 
         public static void TestTime()
@@ -42,22 +71,24 @@ namespace PizzaBox.Client
 
         public static void TestOrder()
         {
-            var order = new Order();
-            var pizza1 = new MeatPizza(SizeType.Large);
-            var pizza2 = new MeatPizza(SizeType.Large);
-            order.AddPizza(pizza1);
-            order.AddPizza(pizza2);
-            // var dict = order.ViewPizzas();
-            Console.WriteLine(order);
+            // var order = new Order();
+            // var pizza1 = new MeatPizza(SizeType.Large);
+            // var pizza2 = new MeatPizza(SizeType.Large);
+            // order.AddPizza(pizza1);
+            // order.AddPizza(pizza2);
+            // // var dict = order.ViewPizzas();
+            // Console.WriteLine(order);
+            Customer c = new Customer();
+            CustomerOrderManager.GetManager(c).StartOrderProcess();
         }
 
         public static void TestPointer()
         {
-            APizza p = new MeatPizza(SizeType.Large);
-            List<APizza> l = new List<APizza>();
-            l.Add(p);
-            p = null;
-            Console.WriteLine(l[0]);
+            // APizza p = new MeatPizza(SizeType.Large);
+            // List<APizza> l = new List<APizza>();
+            // l.Add(p);
+            // p = null;
+            // Console.WriteLine(l[0]);
         }
 
         public static void PlayWithStores()
