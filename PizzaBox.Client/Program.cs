@@ -5,6 +5,7 @@ using PizzaBox.Domain.Abstracts;
 using PizzaBox.Domain.Models;
 using PizzaBox.Domain.Singletons;
 using PizzaBox.Storing;
+// using PizzaBox.Storing;
 
 namespace PizzaBox.Client
 {
@@ -18,32 +19,39 @@ namespace PizzaBox.Client
             // TestTime();
             // SavePizzaTypes();
             // TestSavedPizzas();
-            TestOrder();
+            TestUserStory();
+            // TestStoreStory();
+            // TestStoreStory();
+        }
+
+        private static void TestStoreStory()
+        {
+            StoreSingleton.Instance.GetAllStores();
         }
 
         public static void TestSavedPizzas()
         {
-            FileStorage fs = new FileStorage();
-            List<APizza> pizzas = fs.ReadListFromXml<APizza>(FileType.Pizza).ToList();
-            foreach (var item in pizzas)
-            {
-                Console.WriteLine(item.Name);
-            }
+            // FileStorage fs = new FileStorage();
+            // List<APizza> pizzas = fs.ReadListFromXml<APizza>(FileType.Pizza).ToList();
+            // foreach (var item in pizzas)
+            // {
+            //     Console.WriteLine(item.Name);
+            // }
         }
 
         public static void SavePizzaTypes()
         {
-            FileStorage fs = new FileStorage();
-            float sp = PriceManager.Instance.getPrice(SizeType.Large);
-            float cp = PriceManager.Instance.getPrice(CrustType.Thick);
-            var pizzas = new List<APizza>()
-            {
-                new MeatPizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Meat Pizza"},
-                new VeganPizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Vegan Pizza"},
-                new VeggiePizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Veggie Pizza"},
-                new CustomPizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Custom Pizza"}
-            };
-            fs.WriteToXml<APizza>(FileType.Pizza, pizzas);
+            // FileStorage fs = new FileStorage();
+            // float sp = PriceManager.Instance.getPrice(SizeType.Large);
+            // float cp = PriceManager.Instance.getPrice(CrustType.Thick);
+            // var pizzas = new List<APizza>()
+            // {
+            //     new MeatPizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Meat Pizza"},
+            //     new VeganPizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Vegan Pizza"},
+            //     new VeggiePizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Veggie Pizza"},
+            //     new CustomPizza(new Size(SizeType.Large){Price = sp}, new Crust(CrustType.Thick){Price = cp}){Name = "Custom Pizza"}
+            // };
+            // fs.WriteToXml<APizza>(FileType.Pizza, pizzas);
         }
 
         public static void TestTime()
@@ -69,7 +77,7 @@ namespace PizzaBox.Client
             }
         }
 
-        public static void TestOrder()
+        public static void TestUserStory()
         {
             // var order = new Order();
             // var pizza1 = new MeatPizza(SizeType.Large);

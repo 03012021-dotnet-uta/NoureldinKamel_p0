@@ -4,7 +4,7 @@ namespace PizzaBox.Domain.Models
 {
     public class DetroitStore : AStore
     {
-        public DetroitStore()
+        public DetroitStore() : base()
         {
             Name = "Detroit's Pizza Store";
         }

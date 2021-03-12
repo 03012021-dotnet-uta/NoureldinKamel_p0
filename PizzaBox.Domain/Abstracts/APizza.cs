@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using PizzaBox.Domain.Models;
 using PizzaBox.Domain.Singletons;
@@ -12,12 +14,14 @@ namespace PizzaBox.Domain.Abstracts
     [XmlInclude(typeof(VeggiePizza))]
     [XmlInclude(typeof(VeganPizza))]
     [XmlInclude(typeof(CustomPizza))]
-    public abstract class APizza
+    public class APizza
     {
+        [Key]
+        public Guid PizzaId { get; set; } = Guid.NewGuid();
         protected List<ToppingType> DefaultToppings = new List<ToppingType>();
-        protected Size PizzaSize { get; set; }
-        protected Crust PizzaCrust { get; set; }
-        protected List<Topping> ToppingList { get; set; }
+        public Size PizzaSize { get; set; }
+        public Crust PizzaCrust { get; set; }
+        public List<Topping> ToppingList { get; set; }
         public string Name { get; set; } // property
 
         private int MAX_TOPPING = 5;
@@ -30,7 +34,8 @@ namespace PizzaBox.Domain.Abstracts
             InitializeToppings();
         }
 
-        protected abstract void InitializeToppings();
+        protected virtual void InitializeToppings()
+        { }
 
         public APizza(Size size, Crust crust)
         {

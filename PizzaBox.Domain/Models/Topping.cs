@@ -10,6 +10,10 @@ namespace PizzaBox.Domain.Models
 
     public class Topping : AComponent<ToppingType>
     {
+        public Topping() : base()
+        {
+
+        }
         public Topping(ToppingType type) : base(type)
         {
         }

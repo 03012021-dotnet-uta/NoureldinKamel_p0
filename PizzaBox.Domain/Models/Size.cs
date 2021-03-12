@@ -9,6 +9,10 @@ namespace PizzaBox.Domain.Models
 
     public class Size : AComponent<SizeType>
     {
+        public Size() : base()
+        {
+
+        }
         public Size(SizeType type) : base(type)
         {
         }

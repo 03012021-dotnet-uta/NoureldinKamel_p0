@@ -94,3 +94,17 @@ as a store, i should be able do this:
 - see pizza type, count, revenue by week or by month
 
 > the goal is to try to complete as many reqs as you can in the time alloted. :)
+
+### Repo specific section:
+
+package commands needed for [Domain] project:
+
+- dotnet tool install --global dotnet-ef --version 5.0.4
+
+- dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.4
+- dotnet add package Microsoft.EntityFrameworkCore.Design --version 5.0.4
+- dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 5.0.4
+
+package commands needed for [Testing] project:
+
+- dotnet add package xUnit

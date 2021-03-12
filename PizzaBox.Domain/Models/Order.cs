@@ -1,12 +1,16 @@
 using System.Collections.Generic;
 using System;
 using PizzaBox.Domain.Abstracts;
+using System.ComponentModel.DataAnnotations;
 
 namespace PizzaBox.Domain.Models
 {
     public class Order
     {
-        private List<APizza> Pizzas { get; set; }
+        [Key]
+        public Guid OrderId { get; set; } = Guid.NewGuid();
+
+        public List<APizza> Pizzas { get; set; }
 
         public float TotalPrice { get; set; }
 
@@ -16,6 +20,8 @@ namespace PizzaBox.Domain.Models
 
         private int MAX_PIZZA_COUNT = 50;
         private int MAX_ORDER_PRICE = 250;
+
+        public bool IsActive { get; set; } = false;
 
         public Order()
         {

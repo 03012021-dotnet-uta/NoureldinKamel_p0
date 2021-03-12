@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfAStore xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <AStore xsi:type="FreddyStore">
+    <StoreId>7baa84ea-b70c-42ce-b9b8-c22929c621c7</StoreId>
     <Name>Freddy's Pizza Store</Name>
+    <ActiveOrders />
   </AStore>
   <AStore xsi:type="ChicagoStore">
+    <StoreId>be11aa88-c636-44d4-aca1-e39a66131007</StoreId>
     <Name>Chicago's Pizza Store</Name>
+    <ActiveOrders />
   </AStore>
   <AStore xsi:type="DetroitStore">
+    <StoreId>80667afd-cf29-493e-99e4-bfb54669a54f</StoreId>
     <Name>Detroit's Pizza Store</Name>
+    <ActiveOrders />
   </AStore>
   <AStore xsi:type="NewYorkStore">
+    <StoreId>9b1702ea-5947-4b94-b055-01d39890eebd</StoreId>
     <Name>NewYork's Pizza Store</Name>
+    <ActiveOrders />
   </AStore>
 </ArrayOfAStore>

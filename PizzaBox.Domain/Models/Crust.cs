@@ -9,6 +9,10 @@ namespace PizzaBox.Domain.Models
     }
     public class Crust : AComponent<CrustType>
     {
+        public Crust() : base()
+        {
+
+        }
         public Crust(CrustType type) : base(type)
         {
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using PizzaBox.Domain.Abstracts;
 using PizzaBox.Domain.Singletons;
 
@@ -7,10 +8,10 @@ namespace PizzaBox.Domain.Models
 {
     public class Customer
     {
+        [Key]
+        public Guid CustomerId { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
-
-        public List<Order> FinishedOrders { get; set; }
-
+        public virtual List<Order> FinishedOrders { get; set; }
         public Order CurrentOrder { get; set; }
 
         public Customer()
