@@ -26,7 +26,7 @@ namespace PizzaBox.Domain.Abstracts
 
         public override string ToString()
         {
-            return _type + " with price: " + Price;
+            return _type + " costs: " + Price;
         }
     }
 }

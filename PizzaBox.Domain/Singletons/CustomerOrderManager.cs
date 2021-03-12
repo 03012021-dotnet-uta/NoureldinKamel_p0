@@ -12,22 +12,6 @@ namespace PizzaBox.Domain.Singletons
     {
         private Customer CurrentCustomer;
 
-        // public static CustomerOrderManager Instance
-        // {
-        //     get
-        //     {
-        //         if (_instance == null)
-        //         {
-        //             _instance = new CustomerOrderManager();
-        //         }
-        //         return _instance;
-        //     }
-        //     set
-        //     {
-        //         _instance = value;
-        //     }
-        // }
-
         public static CustomerOrderManager GetManager(Customer customer)
         {
             if (_instance == null)
@@ -44,10 +28,9 @@ namespace PizzaBox.Domain.Singletons
 
         private static CustomerOrderManager _instance;
 
-        public Customer AddOrderToCustomer(Customer customer)
+        public void AddOrderToCustomer(AStore store)
         {
-            customer.CurrentOrder = new Order();
-            return customer;
+            CurrentCustomer.CurrentOrder = new Order() { Store = store };
         }
 
         // public Customer AddPizzaToOrder(Order order)
@@ -55,76 +38,160 @@ namespace PizzaBox.Domain.Singletons
 
         // }
 
-        private string ReadStringInput()
+
+        public void StartStoreApp()
         {
-            //TODO: validate input
-            return Console.ReadLine();
+            PrintStartingSequence();
+            // var stores = GetAvailableStores();
+            ExistOrOrder();
         }
 
-        public void PrintStores(List<AStore> stores)
+        public void ExistOrOrder()
         {
-            // foreach (var store in stores)
-            // {
-            //     Console.WriteLine("")
-            // }
-            Console.WriteLine("Type a number before the store you want to choose");
-            for (int i = 0; i < stores.Count; i++)
+            bool loop = true;
+            bool end = false;
+            while (loop)
             {
-                Console.WriteLine("[" + i + "] : " + stores[i]);
+                PrintInstruction("choose an option");
+                PrintOption(0, "exit");
+                PrintOption(1, "start a new order or continue last one");
+                PrintOption(2, "view order history");
+                var input = ReadIntInput(0, 2);
+                switch (input)
+                {
+                    case 1: StartOrderProcess(out end); break;
+                    case 2: ViewOrderHistory(); break;
+                    case 3: loop = false; break;
+                }
+                if (end)
+                    break;
             }
         }
 
-        public int ReadIntInput()
+        public void ViewOrderHistory()
         {
-            bool success = false;
-            int i = 0;
-            while (!success)
+            PrintInstruction("View order new yet implemented");
+        }
+
+        public void StartOrderProcess(out bool end)
+        {
+            var loop = true;
+            end = false;
+            while (loop)
             {
-                Console.WriteLine("Please enter a number");
-                string line = Console.ReadLine();
-                line = line.Trim();
-                success = Int32.TryParse(line, out i);
-            }
-            return i;
-        }
-
-        public AStore ChooseStore()
-        {
-            var availableStores = GetAvailableStores();
-            PrintStores(availableStores);
-            var choice = ReadIntInput();
-            return availableStores[choice];
-        }
-
-        public APizza ChoosePizza()
-        {
-            List<APizza> showPizzas = GetAllPizzas();
-            PrintPizza(showPizzas);
-            var choice = ReadIntInput();
-            return showPizzas[choice];
-        }
-
-        public void PrintPizza(List<APizza> showPizzas)
-        {
-            Console.WriteLine("Type a number before the pizza you want to choose");
-            for (int i = 0; i < showPizzas.Count; i++)
-            {
-                Console.WriteLine("[" + i + "] : " + showPizzas[i].Name);
+                if (CurrentCustomer.CurrentOrder != null)
+                {
+                    PrintInfo("current order is");
+                    Console.WriteLine(CurrentCustomer.CurrentOrder);
+                    ShowOrderActionMenu(out end);
+                }
+                else
+                {
+                    var store = GetAvailableStores();
+                    PrintStores(store);
+                    var input = ReadIntInput(0, store.Count);
+                    if (input == 0)
+                    {
+                        break;
+                    }
+                    var ChosenStore = store[--input];
+                    AddOrderToCustomer(ChosenStore);
+                    ShowOrderActionMenu(out end);
+                }
+                if (end)
+                    break;
             }
         }
 
-        public void StartOrderProcess()
+        public void ShowOrderActionMenu(out bool end)
         {
-            if (CurrentCustomer.OrderedInLastTwoHours())
+            end = false;
+            var loop = true;
+            while (loop)
             {
-                Console.WriteLine("Sorry, You can not order twice in less than 2 hours");
+                PrintInfo("Your order is");
+                Console.WriteLine(CurrentCustomer.CurrentOrder);
+                PrintOrderActionMenu();
+                var input = ReadIntInput(0, 4);
+                end = false;
+                switch (input)
+                {
+                    case 1: AddPizza(); break;
+                    case 2: RemovePizzaMenu(); break;
+                    case 3: ChooseAPizzaToCustomize(); break;
+                    case 4: Checkout(out end); break;
+                    case 0: loop = false; break;
+                }
+                if (end)
+                    break;
+
+            }
+        }
+
+        private void Checkout(out bool end)
+        {
+            if (!(CurrentCustomer.IsOrderOk() && CurrentCustomer.CanOrderCheckout()))
+            {
+                end = false;
                 return;
             }
-            var storeChoice = ChooseStore();
-            CurrentCustomer.CurrentOrder = new Order() { Store = storeChoice };
-            var PizzaChoice = ChoosePizza();
-            var realPizza = GetRealPizza(PizzaChoice);
-            realPizza = CustomizePizza(realPizza);
+            PrintInstruction("choose an option");
+            PrintInfo("Your order is");
+            Console.WriteLine(CurrentCustomer.CurrentOrder);
+            PrintOption(1, "checkout");
+            PrintOption(0, "go back");
+            var input = ReadIntInput(0, 1);
+            end = false;
+            if (input == 1)
+            {
+                Order o = CurrentCustomer.CurrentOrder;
+                CurrentCustomer.Checkout();
+                PrintThankYouMessage(o);
+                end = true;
+            }
+        }
+
+        private void PrintThankYouMessage(Order order)
+        {
+            // int i = Console.CursorTop;
+            Console.Clear();
+            PrintInfo("Your order was successful");
+            Console.WriteLine(order);
+        }
+
+        private void ChooseAPizzaToCustomize()
+        {
+            var addedPizzas = CurrentCustomer.CurrentOrder.GetPizzas();
+            PrintInstruction("choose a pizza to customize");
+            PrintAddedPizzaMenu(addedPizzas);
+            var input = ReadIntInput(0, addedPizzas.Count);
+            if (input == 0)
+            {
+                return;
+            }
+            CustomizePizza(addedPizzas[--input]);
+        }
+
+        public void AddPizza()
+        {
+            List<APizza> showPizzas = GetAllPizzas();
+            PrintShowPizzas(showPizzas);
+            var input = ReadIntInput(0, showPizzas.Count);
+            if (input == 0)
+            {
+                return;
+            }
+            // input--;
+            // Console.WriteLine("showPizzas.Count: " + showPizzas.Count);
+            // Console.WriteLine("input: " + input);
+            var realPizza = GetRealPizza(showPizzas[--input]);
+            bool added = CurrentCustomer.AddPizza(realPizza);
+            do
+            {
+                CustomizePizza(realPizza);
+                added = CurrentCustomer.AddPizza(realPizza);
+            } while (!added);
+
         }
 
         public APizza CustomizePizza(APizza pizza)
@@ -135,43 +202,88 @@ namespace PizzaBox.Domain.Singletons
                 Console.WriteLine("your current pizza is: ");
                 Console.WriteLine(pizza);
                 PrintPizzaCustomizeMenu();
-                var actionChoice = ReadIntInput();
+                var actionChoice = ReadIntInput(0, 3);
                 switch (actionChoice)
                 {
-                    case 0: pizza = CustomizeTopping(pizza); break;
-                    case 1: pizza = ChangeCrust(pizza); break;
-                    case 2: pizza = ChangeSize(pizza); break;
-                    case 3: loop = false; break;
+                    case 1: pizza = CustomizeTopping(pizza); break;
+                    case 2: pizza = ChangeCrust(pizza); break;
+                    case 3: pizza = ChangeSize(pizza); break;
+                    case 0: loop = false; break;
                     default: break;
                 }
             }
             return pizza;
         }
 
+        public void RemovePizzaMenu()
+        {
+            var addedPizzas = CurrentCustomer.CurrentOrder.GetPizzas();
+            PrintInstruction("choose a pizza to remove");
+            PrintAddedPizzaMenu(addedPizzas);
+            var input = ReadIntInput(0, addedPizzas.Count);
+            if (input == 0)
+            {
+                return;
+            }
+            CurrentCustomer.RemovePizza(addedPizzas[--input]);
+        }
+
+
+        /* #region Change Crust and Size */
+        public APizza ChangeCrust(APizza pizza)
+        {
+            var crustList = GetAllCrusts();
+            PrintPizza(pizza);
+            PrintInstruction("choose a crust");
+            PrintTypeOptionList(crustList);
+            var input = ReadIntInput(0, crustList.Count);
+            if (input == 0)
+            {
+                return pizza;
+            }
+            pizza.SetCrust(crustList[--input]);
+            return pizza;
+        }
+
+        public APizza ChangeSize(APizza pizza)
+        {
+            var sizeList = GetAllSizes();
+            PrintPizza(pizza);
+            PrintTypeOptionList(sizeList);
+            var input = ReadIntInput(0, sizeList.Count);
+            if (input == 0)
+            {
+                return pizza;
+            }
+            pizza.SetSize(sizeList[--input]);
+            return pizza;
+        }
+
+        /* #endregion */
+
+        /* #region Customize Toppings */
         public APizza CustomizeTopping(APizza pizza)
         {
             bool loop = true;
             while (loop)
             {
                 var toppings = GetAllToppings();
+                PrintPizza(pizza);
                 PrintToppingMenu();
-                var toppingAction = ReadIntInput();
-                // PrintPizza(pizza);
+                var toppingAction = ReadIntInput(0, 2);
                 switch (toppingAction)
                 {
-                    case 0: AddTopping(pizza); break;
-                    case 1: RemoveTopping(pizza); break;
-                    case 2: loop = false; break;
-                    default: break;
+                    case 1: AddTopping(pizza); break;
+                    case 2: RemoveTopping(pizza); break;
+                    case 0: loop = false; break;
+                }
+                //todo: allow user to exit
+                if (!pizza.IsPizzaToppingsOk())
+                {
+                    loop = true;
                 }
             }
             return pizza;
-        }
-
-        public void PrintPizza(APizza pizza)
-        {
-            Console.WriteLine("your pizza is: ");
-            Console.WriteLine(pizza);
         }
 
         //TODO: only show available toppings
@@ -179,61 +291,61 @@ namespace PizzaBox.Domain.Singletons
         {
             List<Topping> toppings = GetAllToppings();
             PrintPizza(pizza);
-            Console.WriteLine("available toppings are: ");
-
-            for (int i = 0; i < toppings.Count; i++)
+            PrintInstruction("available toppings are");
+            PrintTypeOptionList(toppings);
+            var input = ReadIntInput(0, toppings.Count);
+            if (input == 0)
             {
-                Console.WriteLine("[" + i + "]: " + toppings[i].Type + " -- $" + toppings[i].Price);
+                return pizza;
             }
-            //todo: validate between range
-            var input = ReadIntInput();
-
-            pizza.AddTopping(toppings[input]);
+            pizza.AddTopping(toppings[--input]);
             return pizza;
         }
 
         public APizza RemoveTopping(APizza pizza)
         {
+            var toppingList = pizza.GetAddedToppings();
+            PrintInstruction("added toppings are");
+            PrintTypeOptionList(toppingList);
+            var input = ReadIntInput(0, toppingList.Count);
+            if (input == 0)
+            {
+                return pizza;
+            }
+            pizza.RemoveTopping(toppingList[--input]);
             return pizza;
         }
 
-        public void PrintToppingMenu()
-        {
-            Console.WriteLine("[0]: Add a topping");
-            Console.WriteLine("[1]: Remove a topping");
-            Console.WriteLine("[2]: Go Back");
-        }
+        /* #endregion */
 
-        public APizza PrintToppingMenu(APizza pizza)
+        public int ReadIntInput(int min, int max)
         {
-            return pizza;
-        }
-
-        public APizza ChangeCrust(APizza pizza)
-        {
-            return pizza;
-        }
-
-        public APizza ChangeSize(APizza pizza)
-        {
-            return pizza;
-        }
-
-        public void PrintPizzaCustomizeMenu()
-        {
-            Console.WriteLine("choose something to customize or change");
-            Console.WriteLine("[0]: toppings");
-            Console.WriteLine("[1]: crust");
-            Console.WriteLine("[2]: size");
-            Console.WriteLine("[3]: save pizza");
+            bool success = false;
+            int i = 0;
+            while (!success)
+            {
+                PrintInstruction("enter a whole number between " + min + " and " + max);
+                string line = Console.ReadLine();
+                line = line.Trim();
+                success = Int32.TryParse(line, out i);
+                if (!(i <= max || i >= min))
+                {
+                    success = false;
+                }
+            }
+            return i;
         }
 
         public APizza GetRealPizza(APizza showPizza)
         {
+            // if (showPizza.Name.Contains("Custom"))
+            // {
+            //     CustomizePizza(showPizza);
+            // }
             showPizza.AddDefaultToppings();
             showPizza.AddDefaultCrust();
             showPizza.AddDefaultSize();
-            Console.WriteLine("show pizza: " + showPizza);
+            // Console.WriteLine("show pizza: " + showPizza);
             return showPizza;
             // showPizzas.
             // foreach (var pizza in showPizzas)
@@ -242,6 +354,130 @@ namespace PizzaBox.Domain.Singletons
             // }
         }
 
+
+        /* #region Console Prints */
+
+        /// <summary>
+        /// 0-4 options
+        /// </summary>
+        public void PrintOrderActionMenu()
+        {
+            PrintInstruction("choose what you want to do");
+            PrintOption(1, "Add Pizza");
+            PrintOption(2, "Remove Pizza");
+            PrintOption(3, "Custmoize a pizza");
+            PrintOption(4, "Checkout");
+            PrintOption(0, "Go Back");
+        }
+
+        private void PrintAddedPizzaMenu(List<APizza> addedPizzas)
+        {
+            PrintInfo("you order is");
+            Console.WriteLine(CurrentCustomer.CurrentOrder);
+            for (int i = 0; i < addedPizzas.Count; i++)
+            {
+                PrintOption((i + 1), "" + addedPizzas[i]);
+            }
+            PrintOption(0, "go back");
+        }
+
+        public void PrintPizza(APizza pizza)
+        {
+            PrintInfo("your pizza is");
+            Console.WriteLine(pizza);
+        }
+
+        /// <summary>
+        /// 0-2 options
+        /// </summary>
+        public void PrintToppingMenu()
+        {
+            PrintInstruction("choose an action");
+            PrintOption(1, "Add a topping");
+            PrintOption(2, "Remove a topping");
+            PrintOption(0, "Go Back");
+        }
+
+        /// <summary>
+        /// 0-3 options
+        /// </summary>
+        public void PrintPizzaCustomizeMenu()
+        {
+            PrintInstruction("choose something to customize or change");
+            PrintOption(1, "toppings");
+            PrintOption(2, "crust");
+            PrintOption(3, "size");
+            PrintOption(0, "go back");
+        }
+
+        public void PrintTypeOptionList<T>(List<T> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                PrintOption((i + 1), "" + list[i]);
+            }
+            PrintOption(0, "go back");
+        }
+
+        public void PrintStores(List<AStore> stores)
+        {
+            PrintInstruction("type a number before the store you want to choose");
+            for (int i = 0; i < stores.Count; i++)
+            {
+                // Console.WriteLine("[" + i + "] : " + stores[i]);
+                PrintOption((i + 1), "" + stores[i]);
+            }
+            PrintOption(0, "go back");
+        }
+
+        public void PrintShowPizzas(List<APizza> pizzas)
+        {
+            PrintInstruction("type a number before the pizza you want to choose");
+            for (int i = 0; i < pizzas.Count; i++)
+            {
+                PrintOption((i + 1), "" + pizzas[i].Name);
+            }
+            PrintOption(0, "Go Back");
+        }
+
+        public void PrintStartingSequence()
+        {
+            Console.Clear();
+            var preSymbols = 0;
+            var postSymbols = 0;
+            char baseS = '>';
+            string pre = "";
+            string post = "";
+            for (int i = 0; i < 8; i++)
+            {
+                preSymbols = i + 1;
+                postSymbols = 8 - i - 1;
+                pre = new string(baseS, preSymbols);
+                post = new string(baseS, postSymbols);
+                Console.WriteLine(pre + "[Starting order process]" + post);
+                System.Threading.Thread.Sleep(100);
+                Console.SetCursorPosition(0, 0);
+            }
+        }
+
+        private void PrintInfo(string v)
+        {
+            Console.WriteLine("~{" + v + "}~");
+        }
+
+        public void PrintInstruction(string inst)
+        {
+            Console.WriteLine(" >>> [ Please " + inst + " ] >>>");
+        }
+
+        public void PrintOption(int num, string option)
+        {
+            Console.WriteLine("[" + num + "]: " + option);
+        }
+
+        /* #endregion */
+
+        /* #region get show lists */
         public List<AStore> GetAvailableStores()
         {
             var stores = StoreSingleton.Instance.GetAllStores();
@@ -260,15 +496,6 @@ namespace PizzaBox.Domain.Singletons
             FileStorage fs = new FileStorage();
             return fs.ReadListFromXml<APizza>(FileType.Pizza).ToList();
         }
-        // public bool ChooseStore(AStore store)
-        // {
-        //     if (CurrentCustomer.HasOrderedStoreIn24Hrs(store))
-        //     {
-        //         return false;
-        //     }
-        //     CurrentOrder.Store = store;
-        //     return true;
-        // }
 
         public List<Topping> GetAllToppings()
         {
@@ -316,5 +543,6 @@ namespace PizzaBox.Domain.Singletons
             return sizes;
         }
 
+        /* #endregion */
     }
 }

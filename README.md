@@ -32,7 +32,7 @@ The application is centered around the interaction of 4 main objects:
 
 ### order
 
-- [required] each order must be able to modify its collection of pizzas
+- ✔️ [required] each order must be able to modify its collection of pizzas
 - ✔️ [required] each order must be able to compute its pricing
 - ✔️ [required] each order must be limited to a total pricing of no more than $250
 - ✔️ [required] each order must be limited to a collection of pizzas of no more than 50
@@ -70,7 +70,7 @@ The application is centered around the interaction of 4 main objects:
 - should be able to launch application
 - ✔️ should be able to view all stores
 - ✔️ should be able to select a store
-- should be to place an order
+- ✔️ should be to place an order
 - with either custom or preset pizzas
 - if custom
 - select crust, size and toppings
@@ -78,7 +78,7 @@ The application is centered around the interaction of 4 main objects:
 - ✔️ select pizza and its size
 - ✔️ see a tally of my order
 - ✔️ add or remove more pizzas
-- and checkout when complete with latest order
+- ✔️ and checkout when complete with latest order
 - see my order history
 - ✔️ make a new order
 

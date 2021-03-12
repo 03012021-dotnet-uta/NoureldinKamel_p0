@@ -42,8 +42,7 @@ namespace PizzaBox.Domain.Models
             {
                 return false;
             }
-            CurrentOrder.AddPizza(pizza);
-            return true;
+            return CurrentOrder.AddPizza(pizza);
         }
 
         public bool RemovePizza(APizza pizza)
@@ -97,13 +96,25 @@ namespace PizzaBox.Domain.Models
         {
             if (CurrentOrder == null)
             {
+                Console.WriteLine("{{!!}} you have to start an order first {{!!}}");
                 return false;
             }
             if (CurrentOrder.Store == null)
             {
+                Console.WriteLine("{{!!}} you have to choose a store first {{!!}}");
                 return false;
             }
             return true;
+        }
+        public bool CanOrderCheckout()
+        {
+            return CurrentOrder.CanCheckout();
+        }
+
+        internal void Checkout()
+        {
+            this.FinishedOrders.Add(CurrentOrder);
+            CurrentOrder = null;
         }
     }
 }

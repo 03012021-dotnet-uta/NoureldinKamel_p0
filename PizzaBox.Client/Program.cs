@@ -79,7 +79,7 @@ namespace PizzaBox.Client
             // // var dict = order.ViewPizzas();
             // Console.WriteLine(order);
             Customer c = new Customer();
-            CustomerOrderManager.GetManager(c).StartOrderProcess();
+            CustomerOrderManager.GetManager(c).StartStoreApp();
         }
 
         public static void TestPointer()

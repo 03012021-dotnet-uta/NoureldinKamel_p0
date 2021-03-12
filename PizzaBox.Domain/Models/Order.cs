@@ -24,9 +24,9 @@ namespace PizzaBox.Domain.Models
             date = DateTime.Now;
         }
 
-        public List<APizza> ViewPizzas()
+        public List<APizza> GetPizzas()
         {
-            return new List<APizza>(Pizzas);
+            return Pizzas;
         }
 
         public bool AddPizza(APizza pizza)
@@ -108,15 +108,27 @@ namespace PizzaBox.Domain.Models
 
         public override string ToString()
         {
-            string s = "[$=====================$]\nOrder contains:";
+            string s = "\tOrder contains:\n";
+            // string s = "[$=======================================$]\nOrder contains:";
             // float total = 0;
             foreach (APizza item in Pizzas)
             {
-                s += item + "\nwith price: " + item.CalculateTotalPrice();
+                s += item + "\n\twith price: " + item.CalculateTotalPrice() + "\n";
                 // total += item.Value + item.Key.CalculateTotalPrice();
             }
-            s += "\nAnd its total is: $" + TotalPrice + "\nat time: " + date;
+            s += "\tAnd its total is: $" + TotalPrice + "\n\tat time: " + date;
+            // s += "\n$=======================================$]";
             return s;
+        }
+
+        public bool CanCheckout()
+        {
+            if (TotalPrice <= 0)
+            {
+                Console.WriteLine("{{!!}} you must add at least something {{!!}}");
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -50,10 +50,9 @@ namespace PizzaBox.Domain.Abstracts
         // protected abstract void AddSize(Size size);
         public void AddDefaultToppings()
         {
-            System.Console.WriteLine("the toppings are: " + DefaultToppings[0]);
             foreach (var topType in DefaultToppings)
             {
-                System.Console.WriteLine("topType:" + topType);
+                // System.Console.WriteLine("topType:" + topType);
                 float price = PriceManager.Instance.getPrice(topType);
                 ToppingList.Add(new Topping(topType) { Price = price });
 
@@ -169,13 +168,25 @@ namespace PizzaBox.Domain.Abstracts
 
         public override string ToString()
         {
-            string s = "A pizza with toppings: ";
-            foreach (var item in ToppingList)
+            string s = "\tA " + Name + " with ";
+            if (ToppingList.Count <= 0)
             {
-                s += "\n\t" + item;
+                s += "no toppings";
             }
-            s += "\nwith crust: " + PizzaCrust;
-            s += "\nof size: " + PizzaSize;
+            else
+            {
+                s += "toppings:";
+            }
+            for (int i = 0; i < ToppingList.Count; i++)
+            {
+                s += "\n\t\t" + ToppingList[i];
+            }
+            // foreach (var item in ToppingList)
+            // {
+            //     s += "\n\t" + item;
+            // }
+            s += "\n\twith crust: " + PizzaCrust;
+            s += "\n\tof size: " + PizzaSize;
             return s;
         }
     }
