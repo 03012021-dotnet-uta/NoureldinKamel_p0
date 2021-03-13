@@ -21,7 +21,54 @@ namespace PizzaBox.Client
             // TestSavedPizzas();
             TestUserStory();
             // TestStoreStory();
-            // TestStoreStory();
+            // TestDatabase();
+        }
+
+        private static void TestDatabase()
+        {
+            // var pp = new PizzaBoxRepositoryLayer();
+            // Customer c = new Customer()
+            // {
+            //     Name = "first name",
+            //     Username = "user1",
+            // };
+            // c.SetPass("12345678");
+            // bool create = pp.CreateCustomer(c);
+            // if (create)
+            // {
+            //     Console.WriteLine("added customer: " + c);
+            //     bool s = pp.Save();
+            //     Console.WriteLine("saved? " + s);
+            // }
+
+            // using (var db = new DbContextClass())
+            // {
+            //     if (db.Customers.Contains(c))
+            //         return;
+            //     db.Customers.Add(c);
+            //     db.SaveChanges();
+            // }
+            // using (var db = new DbContextClass())
+            // {
+            //     var customer = db.Customers.Where(c => c.Username == "user1").FirstOrDefault();
+            //     customer.SetPass("12345678");
+            //     db.SaveChanges();
+
+            // }
+
+
+            // Console.WriteLine("enter username and pass");
+            // var username = Console.ReadLine();
+            // Console.WriteLine("enter pass");
+            // var pass = Console.ReadLine();
+            // bool authed = false;
+            // using (var db = new DbContextClass())
+            // {
+            //     var rawpass = db.Customers.Where(c => c.Username == username).FirstOrDefault().Password;
+            //     if (Customer.Compare(rawpass, pass))
+            //         authed = true;
+            // }
+            // Console.WriteLine("authed? " + authed);
         }
 
         private static void TestStoreStory()

@@ -43,17 +43,43 @@ namespace PizzaBox.Domain.Singletons
         {
             PrintStartingSequence();
             // var stores = GetAvailableStores();
-            ExistOrOrder();
+            MainSignedOutOptions();
         }
 
-        public void ExistOrOrder()
+
+        public void MainSignedOutOptions()
         {
             bool loop = true;
             bool end = false;
+            CurrentCustomer = null;
+            while (loop)
+            {
+                var input = ChooseMainMenu();
+                switch (input)
+                {
+                    case 1: Login(out CurrentCustomer); break;
+                    case 2: Register(out CurrentCustomer); break;
+                    case 0: loop = false; break;
+                }
+
+                if (CurrentCustomer != null)
+                    OrderOrSignout(out end);
+                else
+                    PrintInfo("login/registration failed");
+
+                if (end)
+                    break;
+            }
+        }
+
+        public void OrderOrSignout(out bool end)
+        {
+            bool loop = true;
+            end = false;
             while (loop)
             {
                 PrintInstruction("choose an option");
-                PrintOption(0, "exit");
+                PrintOption(0, "signout");
                 PrintOption(1, "start a new order or continue last one");
                 PrintOption(2, "view order history");
                 var input = ReadIntInput(0, 2);
@@ -61,12 +87,49 @@ namespace PizzaBox.Domain.Singletons
                 {
                     case 1: StartOrderProcess(out end); break;
                     case 2: ViewOrderHistory(); break;
-                    case 3: loop = false; break;
+                    case 0: loop = false; break;
                 }
                 if (end)
                     break;
             }
         }
+
+
+        /* #region Login and Register */
+        private void Register(out Customer customer)
+        {
+            customer = null;
+            PrintInstruction("enter you name");
+            var name = ReadStringInput();
+            PrintInstruction("enter you username");
+            var username = ReadStringInput();
+            var pp = new PizzaBoxRepositoryLayer();
+            if (pp.CheckUserExists(username))
+            {
+                PrintInfo("account exists");
+                return;
+            }
+            PrintInstruction("enter your password");
+            var pass = ReadStringInput();
+            customer = new Customer()
+            {
+                Name = name,
+                Username = username,
+            };
+            customer.SetPass(pass);
+            PrintInfo("Registration sucess");
+        }
+
+        public bool Login(out Customer customer)
+        {
+            PrintInstruction("enter your username");
+            var username = ReadStringInput();
+            PrintInstruction("enter your password");
+            var pass = ReadStringInput();
+            return new PizzaBoxRepositoryLayer().Login(username, pass, out customer);
+        }
+
+        /* #endregion */
 
         public void ViewOrderHistory()
         {
@@ -151,14 +214,8 @@ namespace PizzaBox.Domain.Singletons
             }
         }
 
-        private void PrintThankYouMessage(Order order)
-        {
-            // int i = Console.CursorTop;
-            Console.Clear();
-            PrintInfo("Your order was successful");
-            Console.WriteLine(order);
-        }
 
+        /* #region Customize pizzas in order */
         private void ChooseAPizzaToCustomize()
         {
             var addedPizzas = CurrentCustomer.CurrentOrder.GetPizzas();
@@ -228,6 +285,24 @@ namespace PizzaBox.Domain.Singletons
             CurrentCustomer.RemovePizza(addedPizzas[--input]);
         }
 
+        public APizza GetRealPizza(APizza showPizza)
+        {
+            // if (showPizza.Name.Contains("Custom"))
+            // {
+            //     CustomizePizza(showPizza);
+            // }
+            showPizza.AddDefaultToppings();
+            showPizza.AddDefaultCrust();
+            showPizza.AddDefaultSize();
+            // Console.WriteLine("show pizza: " + showPizza);
+            return showPizza;
+            // showPizzas.
+            // foreach (var pizza in showPizzas)
+            // {
+
+            // }
+        }
+        /* #endregion */
 
         /* #region Change Crust and Size */
         public APizza ChangeCrust(APizza pizza)
@@ -318,6 +393,7 @@ namespace PizzaBox.Domain.Singletons
 
         /* #endregion */
 
+        /* #region Input Validation */
         public int ReadIntInput(int min, int max)
         {
             bool success = false;
@@ -336,26 +412,37 @@ namespace PizzaBox.Domain.Singletons
             return i;
         }
 
-        public APizza GetRealPizza(APizza showPizza)
+        public string ReadStringInput(bool hide = false)
         {
-            // if (showPizza.Name.Contains("Custom"))
-            // {
-            //     CustomizePizza(showPizza);
-            // }
-            showPizza.AddDefaultToppings();
-            showPizza.AddDefaultCrust();
-            showPizza.AddDefaultSize();
-            // Console.WriteLine("show pizza: " + showPizza);
-            return showPizza;
-            // showPizzas.
-            // foreach (var pizza in showPizzas)
-            // {
-
-            // }
+            return Console.ReadLine();
         }
 
+        /* #endregion */
 
         /* #region Console Prints */
+        private void PrintWelcomeMessage()
+        {
+            PrintInfo("Welcome to the PizzaBox App");
+        }
+
+        private int ChooseMainMenu()
+        {
+            PrintWelcomeMessage();
+            PrintInstruction("choose your next action");
+            PrintInfo("You must have an account before ordering");
+            PrintOption(1, "login");
+            PrintOption(2, "register");
+            PrintOption(0, "exit");
+            return ReadIntInput(0, 2);
+        }
+
+        private void PrintThankYouMessage(Order order)
+        {
+            // int i = Console.CursorTop;
+            Console.Clear();
+            PrintInfo("Your order was successful");
+            Console.WriteLine(order);
+        }
 
         /// <summary>
         /// 0-4 options

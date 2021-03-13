@@ -2,9 +2,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using PizzaBox.Domain.Abstracts;
 
+
 namespace PizzaBox.Domain.Models
 {
-    class DbContextClass : DbContext
+    //todo: change protection level
+    internal class DbContextClass : DbContext
     {
 
         public DbSet<Customer> Customers { get; set; }
