@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using PizzaBox.Domain.Models;
 using PizzaBox.Domain.Abstracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace PizzaBox.Domain.Models
 {
@@ -69,11 +70,52 @@ namespace PizzaBox.Domain.Models
                 Customer c = null;
                 try
                 {
-                    c = db.Customers.Where(c => c.Username == username).First();
+                    c = db.Customers.Include(c => c.CurrentOrder)
+                    .Where(c => c.Username == username)
+                    .Include(c => c.FinishedOrders)
+                    .Include(c => c.CurrentOrder.Store)
+                    .Include(c => c.CurrentOrder.Pizzas)
+                    .First();
+
+                    if (c.CurrentOrder != null)
+                    {
+                        c.CurrentOrder.Pizzas.ForEach(
+                            pizza =>
+                            {
+                                db.Entry(pizza).Reference(p => p.PizzaCrust).Load();
+                                db.Entry(pizza).Reference(p => p.PizzaSize).Load();
+                                db.Entry(pizza).Collection(p => p.ToppingList).Load();
+                            }
+                        );
+                    }
+                    if (c.FinishedOrders.Count > 0)
+                    {
+                        foreach (var order in c.FinishedOrders)
+                        {
+                            db.Entry(order).Reference(o => o.Store).Load();
+                            db.Entry(order).Collection(o => o.Pizzas).Load();
+                            order.Pizzas.ForEach(
+                                pizza =>
+                                {
+                                    db.Entry(pizza).Reference(p => p.PizzaCrust).Load();
+                                    db.Entry(pizza).Reference(p => p.PizzaSize).Load();
+                                    db.Entry(pizza).Collection(p => p.ToppingList).Load();
+                                }
+                            );
+                        }
+                    }
+                    // .Include(c => c.CurrentOrder.Pizzas)
+                    // .Include(c => c.CurrentOrder.Pizzas.FirstOrDefault().PizzaSize)
+                    // .Include(c => c.CurrentOrder.Pizzas.FirstOrDefault().PizzaCrust)
+                    // .Include(c => c.CurrentOrder.Pizzas.FirstOrDefault().ToppingList)
                 }
-                catch (System.Exception)
+                // catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+                // {
+                //     Console.WriteLine("couldn't ");
+                // }
+                catch (System.Exception e)
                 {
-                    Console.WriteLine("customer not found");
+                    Console.WriteLine("customer not found" + e.Message + "\n" + e.StackTrace);
                     customer = null;
                     return false;
                 }
@@ -87,6 +129,11 @@ namespace PizzaBox.Domain.Models
                 {
                     Console.WriteLine("login success");
                     customer = c;
+                    // if (c.CurrentOrder != null)
+                    // {
+                    //     c.CurrentOrder.Pizzas.ForEach(pizza => pizza.PizzaSize = db.Sizes.Where(s => s.ComponentId == pizza.Property()));
+                    //     db.Sizes.Where(s => )
+                    // }
                     return true;
                 }
                 else
@@ -116,6 +163,11 @@ namespace PizzaBox.Domain.Models
             }
         }
 
+        internal bool CheckAndCreateNewOrder()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Register(Customer customer)
         {
             bool saved = false;
@@ -125,6 +177,76 @@ namespace PizzaBox.Domain.Models
                 saved = db.SaveChanges() > 0;
             }
             return saved;
+        }
+
+        public bool SaveNewOrder(Order order)
+        {
+            using (var db = new DbContextClass())
+            {
+                db.Orders.Add(order);
+                return db.SaveChanges() > 0;
+            }
+        }
+
+        public bool SaveCustomerChanges(Customer customer)
+        {
+            using (var db = new DbContextClass())
+            {
+                try
+                {
+                    // db.DbContextOptionsBuilder.EnableSensitiveDataLogging = true;
+                    db.Orders.Where(o => o.OrderId == customer.CurrentOrder.OrderId).First();
+                }
+                catch (System.Exception e)
+                {
+                    Console.WriteLine("couldn't find it " + e.Message + "\n" + e.StackTrace);
+                    SaveNewOrder(customer.CurrentOrder);
+                }
+                // Customer savedCustomer = null;
+                // try
+                // {
+                //     savedCustomer = db.Customers.Where(c => c.Username == customer.Username).First();
+                // }
+                // catch (System.Exception)
+                // {
+                //     Console.WriteLine("user not found");
+                //     return false;
+                // }
+                try
+                {
+                    db.Update(customer);
+                }
+                catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+                {
+                    // db.Orders.Add(customer.CurrentOrder);
+                    // db.Update(customer);
+                    Console.WriteLine("an error occurred while saving your changes: " + e.Message + "\n" + e.StackTrace);
+                }
+                catch (System.InvalidOperationException e)
+                {
+                    Console.WriteLine("an error occurred while saving your changes: " + e.Message + "\n" + e.StackTrace);
+                }
+                return db.SaveChanges() > 0;
+
+            }
+        }
+
+        public bool CheckoutCustomer(Customer customer, Order order)
+        {
+            using (var db = new DbContextClass())
+            {
+                customer.CurrentOrder = null;
+                order.date = DateTime.Now;
+                if (db.Orders.Contains(order))
+                {
+                    db.Update(customer);
+                    db.Database.ExecuteSqlRaw("UPDATE dbo.Customers SET CurrentOrderOrderId = null WHERE CustomerId = '" + customer.CustomerId + "'");
+                    Console.WriteLine("change? :" + db.SaveChanges());
+                }
+                customer.FinishedOrders.Add(order);
+                db.Update(customer);
+                return db.SaveChanges() > 0;
+            }
         }
     }
 }

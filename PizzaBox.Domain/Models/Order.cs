@@ -114,7 +114,7 @@ namespace PizzaBox.Domain.Models
 
         public override string ToString()
         {
-            string s = "\tOrder contains:\n";
+            string s = "\tOrder from " + Store + " containing:\n";
             // string s = "[$=======================================$]\nOrder contains:";
             // float total = 0;
             foreach (APizza item in Pizzas)

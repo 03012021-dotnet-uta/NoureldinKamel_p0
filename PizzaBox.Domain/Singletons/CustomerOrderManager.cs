@@ -28,9 +28,9 @@ namespace PizzaBox.Domain.Singletons
 
         private static CustomerOrderManager _instance;
 
-        public void AddOrderToCustomer(AStore store)
+        public bool AddStoreToOrder(AStore store)
         {
-            CurrentCustomer.CurrentOrder = new Order() { Store = store };
+            return CurrentCustomer.AddStoreToCurrentOrder(store);
         }
 
         // public Customer AddPizzaToOrder(Order order)
@@ -117,7 +117,14 @@ namespace PizzaBox.Domain.Singletons
                 Username = username,
             };
             customer.SetPass(pass);
-            PrintInfo("Registration sucess");
+            if (pp.Register(customer))
+                PrintInfo("Registration sucess");
+            else
+            {
+                PrintInfo("Registration Failed");
+                PrintInstruction("try again");
+                customer = null;
+            }
         }
 
         public bool Login(out Customer customer)
@@ -133,49 +140,103 @@ namespace PizzaBox.Domain.Singletons
 
         public void ViewOrderHistory()
         {
-            PrintInstruction("View order new yet implemented");
+            PrintInfo("Your Order History is:");
+            foreach (var order in CurrentCustomer.FinishedOrders)
+            {
+                Console.WriteLine("order: " + order);
+            }
         }
 
         public void StartOrderProcess(out bool end)
         {
             var loop = true;
             end = false;
+            bool save = false;
             while (loop)
             {
                 if (CurrentCustomer.CurrentOrder != null)
                 {
-                    PrintInfo("current order is");
-                    Console.WriteLine(CurrentCustomer.CurrentOrder);
-                    ShowOrderActionMenu(out end);
+                    Console.WriteLine("an active order found");
+                    int input = PrintSavedOrderMenu();
+                    switch (input)
+                    {
+
+                        case 1: ShowOrderActionMenu(out end, out save); break;
+                        case 2:
+                            {
+                                if (!StartaNewOrder())
+                                    break;
+                                ShowOrderActionMenu(out end, out save);
+                                break;
+                            }
+                        case 0: save = true; loop = false; break;
+                    }
                 }
                 else
                 {
-                    var store = GetAvailableStores();
-                    PrintStores(store);
-                    var input = ReadIntInput(0, store.Count);
-                    if (input == 0)
-                    {
+                    PrintInfo("No Previous active order found");
+                    if (!StartaNewOrder())
                         break;
-                    }
-                    var ChosenStore = store[--input];
-                    AddOrderToCustomer(ChosenStore);
-                    ShowOrderActionMenu(out end);
+                    ShowOrderActionMenu(out end, out save);
                 }
                 if (end)
                     break;
+                if (save)
+                    new PizzaBoxRepositoryLayer().SaveCustomerChanges(CurrentCustomer);
             }
         }
 
-        public void ShowOrderActionMenu(out bool end)
+        private bool StartaNewOrder()
+        {
+            if (new PizzaBoxRepositoryLayer().CheckAndCreateNewOrder())
+                if (!CurrentCustomer.StartOrder())
+                {
+                    Console.WriteLine("couldn't create an order");
+                    return false;
+                }
+            if (!ChooseStoreSuccess())
+            {
+                Console.WriteLine("couldn't assign store");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ChooseStoreSuccess()
+        {
+            var store = GetAvailableStores();
+            PrintStores(store);
+            var input = ReadIntInput(0, store.Count);
+            if (input == 0)
+            {
+                return false;
+            }
+            var ChosenStore = store[--input];
+            return AddStoreToOrder(ChosenStore);
+        }
+
+        private int PrintSavedOrderMenu()
+        {
+            PrintInfo("Your current order is");
+            Console.WriteLine(CurrentCustomer.CurrentOrder);
+            PrintInstruction("Do you want to use this order or start a new one?");
+            PrintOption(1, "Continue this order");
+            PrintOption(2, "Start a new Order");
+            PrintInfo("!Warning! if you choose to start a new one this order would be lost");
+            PrintOption(0, "Go Back");
+            return ReadIntInput(0, 2);
+        }
+
+        public void ShowOrderActionMenu(out bool end, out bool save)
         {
             end = false;
             var loop = true;
+            save = false;
             while (loop)
             {
                 PrintInfo("Your order is");
                 Console.WriteLine(CurrentCustomer.CurrentOrder);
-                PrintOrderActionMenu();
-                var input = ReadIntInput(0, 4);
+                var input = PrintOrderActionMenu();
                 end = false;
                 switch (input)
                 {
@@ -183,7 +244,8 @@ namespace PizzaBox.Domain.Singletons
                     case 2: RemovePizzaMenu(); break;
                     case 3: ChooseAPizzaToCustomize(); break;
                     case 4: Checkout(out end); break;
-                    case 0: loop = false; break;
+                    case 5: loop = false; save = false; break;
+                    case 0: loop = false; save = true; break;
                 }
                 if (end)
                     break;
@@ -209,6 +271,11 @@ namespace PizzaBox.Domain.Singletons
             {
                 Order o = CurrentCustomer.CurrentOrder;
                 CurrentCustomer.Checkout();
+                if (!new PizzaBoxRepositoryLayer().CheckoutCustomer(CurrentCustomer, o))
+                {
+                    PrintInfo("!! There was a problem checking out your order. Please try again !!");
+                    end = false;
+                }
                 PrintThankYouMessage(o);
                 end = true;
             }
@@ -243,11 +310,18 @@ namespace PizzaBox.Domain.Singletons
             // Console.WriteLine("input: " + input);
             var realPizza = GetRealPizza(showPizzas[--input]);
             bool added = CurrentCustomer.AddPizza(realPizza);
-            do
+            if (!added)
+            {
+                do
+                {
+                    CustomizePizza(realPizza);
+                    added = CurrentCustomer.AddPizza(realPizza);
+                } while (!added);
+            }
+            else
             {
                 CustomizePizza(realPizza);
-                added = CurrentCustomer.AddPizza(realPizza);
-            } while (!added);
+            }
 
         }
 
@@ -404,17 +478,30 @@ namespace PizzaBox.Domain.Singletons
                 string line = Console.ReadLine();
                 line = line.Trim();
                 success = Int32.TryParse(line, out i);
-                if (!(i <= max || i >= min))
+                if (success)
                 {
-                    success = false;
+                    success = (i <= max && i >= min);
                 }
             }
+            // Console.Clear();
             return i;
         }
 
         public string ReadStringInput(bool hide = false)
         {
-            return Console.ReadLine();
+            bool l = false;
+            string s = "";
+            do
+            {
+                s = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(s))
+                {
+                    l = true;
+                }
+            }
+            while (l);
+            Console.Clear();
+            return s;
         }
 
         /* #endregion */
@@ -447,14 +534,16 @@ namespace PizzaBox.Domain.Singletons
         /// <summary>
         /// 0-4 options
         /// </summary>
-        public void PrintOrderActionMenu()
+        public int PrintOrderActionMenu()
         {
             PrintInstruction("choose what you want to do");
             PrintOption(1, "Add Pizza");
             PrintOption(2, "Remove Pizza");
-            PrintOption(3, "Custmoize a pizza");
+            PrintOption(3, "Customize a pizza");
             PrintOption(4, "Checkout");
-            PrintOption(0, "Go Back");
+            PrintOption(5, "Go Back, don't save");
+            PrintOption(0, "Go Back, save this order");
+            return ReadIntInput(0, 5);
         }
 
         private void PrintAddedPizzaMenu(List<APizza> addedPizzas)
