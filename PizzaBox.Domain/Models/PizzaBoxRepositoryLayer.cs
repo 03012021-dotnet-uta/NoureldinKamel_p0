@@ -163,9 +163,34 @@ namespace PizzaBox.Domain.Models
             }
         }
 
-        internal bool CheckAndCreateNewOrder()
+        /// <summary>
+        /// check if customer has an order saved in the db
+        /// if yes, delete that order
+        /// if no, just do nothing
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        internal bool DeleteOrderIfExists(Customer customer)
         {
-            throw new NotImplementedException();
+            using (var db = new DbContextClass())
+            {
+                Order o = null;
+                try
+                {
+                    o = db.Orders.Where(o => o.OrderId == db.Customers.Where(c => c.CustomerId == customer.CustomerId).First().CurrentOrder.OrderId).First();
+                }
+                catch (System.Exception)
+                {
+                    customer.CurrentOrder = null;
+                    return true;
+                }
+                customer.CurrentOrder = null;
+                // db.Database.ExecuteSqlRaw("UPDATE dbo.Customers SET CurrentOrderOrderId = null WHERE CustomerId = '" + customer.CustomerId + "'");
+                db.Update(customer);
+                // db.SaveChanges();
+                db.Orders.Remove(o);
+                return db.SaveChanges() > 0;
+            }
         }
 
         public bool Register(Customer customer)
@@ -192,28 +217,52 @@ namespace PizzaBox.Domain.Models
         {
             using (var db = new DbContextClass())
             {
-                try
+                if (!db.Orders.Contains(customer.CurrentOrder))
                 {
-                    // db.DbContextOptionsBuilder.EnableSensitiveDataLogging = true;
-                    db.Orders.Where(o => o.OrderId == customer.CurrentOrder.OrderId).First();
-                }
-                catch (System.Exception e)
-                {
-                    Console.WriteLine("couldn't find it " + e.Message + "\n" + e.StackTrace);
                     SaveNewOrder(customer.CurrentOrder);
                 }
-                // Customer savedCustomer = null;
+                else
+                {
+                    customer.CurrentOrder.Pizzas.ForEach(pizza =>
+                    {
+                        if (!db.Pizzas.Contains(pizza))
+                        {
+                            db.Pizzas.Add(pizza);
+                        }
+                        else
+                        {
+                            pizza.ToppingList.ForEach(topping =>
+                            {
+                                if (!db.Toppings.Contains(topping))
+                                {
+                                    db.Toppings.Add(topping);
+                                }
+                            });
+                            if (!db.Crusts.Contains(pizza.PizzaCrust))
+                            {
+                                db.Crusts.Add(pizza.PizzaCrust);
+                            }
+                            if (!db.Sizes.Contains(pizza.PizzaSize))
+                            {
+                                db.Sizes.Add(pizza.PizzaSize);
+                            }
+                        }
+                    });
+                    db.SaveChanges();
+                }
                 // try
                 // {
-                //     savedCustomer = db.Customers.Where(c => c.Username == customer.Username).First();
+                //     // db.DbContextOptionsBuilder.EnableSensitiveDataLogging = true;
+                //     db.Orders.Where(o => o.OrderId == customer.CurrentOrder.OrderId).First();
                 // }
-                // catch (System.Exception)
+                // catch (System.Exception e)
                 // {
-                //     Console.WriteLine("user not found");
-                //     return false;
+                //     Console.WriteLine("couldn't find it " + e.Message + "\n" + e.StackTrace);
+                //     SaveNewOrder(customer.CurrentOrder);
                 // }
                 try
                 {
+                    db.Update(customer.CurrentOrder);
                     db.Update(customer);
                 }
                 catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
@@ -231,6 +280,39 @@ namespace PizzaBox.Domain.Models
             }
         }
 
+        // public bool AddPizza(APizza pizza)
+        // {
+        //     using (var db = new DbContextClass())
+        //     {
+        //         try
+        //         {
+
+        //         }
+        //         catch (System.Exception)
+        //         {
+
+        //             throw;
+        //         }
+        //     }
+        // }
+
+        public bool RemovePizzaFromDBOrder(Order order, APizza pizza)
+        {
+            using (var db = new DbContextClass())
+            {
+                if (!db.Orders.Contains(order))
+                {
+                    return true;
+                }
+                if (!db.Pizzas.Contains(pizza))
+                {
+                    return true;
+                }
+                db.Pizzas.Remove(pizza);
+                return db.SaveChanges() > 0;
+            }
+        }
+
         public bool CheckoutCustomer(Customer customer, Order order)
         {
             using (var db = new DbContextClass())
@@ -245,6 +327,15 @@ namespace PizzaBox.Domain.Models
                 }
                 customer.FinishedOrders.Add(order);
                 db.Update(customer);
+                return db.SaveChanges() > 0;
+            }
+        }
+
+        public bool DeleteCustomer(Customer customer)
+        {
+            using (var db = new DbContextClass())
+            {
+                db.Customers.Remove(customer);
                 return db.SaveChanges() > 0;
             }
         }

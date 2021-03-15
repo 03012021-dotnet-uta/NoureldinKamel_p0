@@ -6,7 +6,7 @@ namespace PizzaBox.Domain.Models
     {
         public DetroitStore() : base()
         {
-            Name = "Detroit's Pizza Store";
+            // Name = "Detroit's Pizza Store";
         }
     }
 }

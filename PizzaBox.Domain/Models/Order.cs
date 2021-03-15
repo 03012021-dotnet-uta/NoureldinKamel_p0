@@ -51,7 +51,12 @@ namespace PizzaBox.Domain.Models
 
         public bool RemovePizza(APizza pizza)
         {
-            return Pizzas.Remove(pizza);
+            if (Pizzas.Remove(pizza))
+            {
+                TotalPrice -= pizza.CalculateTotalPrice();
+                return true;
+            }
+            return false;
         }
 
 

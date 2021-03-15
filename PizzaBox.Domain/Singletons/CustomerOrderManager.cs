@@ -62,7 +62,7 @@ namespace PizzaBox.Domain.Singletons
                     case 0: loop = false; break;
                 }
 
-                if (CurrentCustomer != null)
+                if (CurrentCustomer != null && loop)
                     OrderOrSignout(out end);
                 else
                     PrintInfo("login/registration failed");
@@ -188,12 +188,16 @@ namespace PizzaBox.Domain.Singletons
 
         private bool StartaNewOrder()
         {
-            if (new PizzaBoxRepositoryLayer().CheckAndCreateNewOrder())
-                if (!CurrentCustomer.StartOrder())
-                {
-                    Console.WriteLine("couldn't create an order");
-                    return false;
-                }
+            if (!new PizzaBoxRepositoryLayer().DeleteOrderIfExists(CurrentCustomer))
+            {
+                Console.WriteLine("faced a connection error, please try again");
+                return false;
+            }
+            if (!CurrentCustomer.StartOrder())
+            {
+                Console.WriteLine("couldn't create an order");
+                return false;
+            }
             if (!ChooseStoreSuccess())
             {
                 Console.WriteLine("couldn't assign store");
@@ -356,7 +360,13 @@ namespace PizzaBox.Domain.Singletons
             {
                 return;
             }
-            CurrentCustomer.RemovePizza(addedPizzas[--input]);
+            if (new PizzaBoxRepositoryLayer().RemovePizzaFromDBOrder(CurrentCustomer.CurrentOrder, addedPizzas[--input]))
+                CurrentCustomer.RemovePizza(addedPizzas[input]);
+            else
+            {
+                PrintInfo("a connection error occured. we couldn't remove the pizza");
+                return;
+            }
         }
 
         public APizza GetRealPizza(APizza showPizza)

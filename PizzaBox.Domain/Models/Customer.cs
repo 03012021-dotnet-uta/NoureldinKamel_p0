@@ -194,10 +194,21 @@ namespace PizzaBox.Domain.Models
         public bool ComparePass(string rawSaved, string entered)
         {
             /* Extract the bytes */
+            Console.WriteLine("saved: " + rawSaved);
             byte[] hashBytes = Convert.FromBase64String(rawSaved);
+            // lock (hashBytes) ;
             /* Get the salt */
             byte[] salt = new byte[16];
-            Array.Copy(hashBytes, 0, salt, 0, 16);
+            lock (salt)
+            {
+                lock (hashBytes)
+                {
+                    lock (this)
+                    {
+                        Array.Copy(hashBytes, 0, salt, 0, 16);
+                    }
+                }
+            }
             /* Compute the hash on the password the user entered */
             var pbkdf2 = new Rfc2898DeriveBytes(entered, salt, 100000);
             byte[] hash = pbkdf2.GetBytes(20);
