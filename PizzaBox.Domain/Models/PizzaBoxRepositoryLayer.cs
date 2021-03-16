@@ -7,40 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PizzaBox.Domain.Models
 {
+    /* #region Customer Methods */
     public class PizzaBoxRepositoryLayer
     {
-        // List<Customer> Customers = new List<Customer>();
-        // List<APizza> APizzas = new List<APizza>();
-        // List<Order> Orders = new List<Order>();
-        // List<AStore> AStores = new List<AStore>();
-        // List<Size> Sizes = new List<Size>();
-        // List<Crust> Crusts = new List<Crust>();
-        // List<Topping> Toppings = new List<Topping>();
-
-        // DbContextClass db = new DbContextClass();
-        // int numberOfChoices = Enum.GetNames(typeof(Choice)).Length; // get a always-current number of options of Enum Choice
-        // Random randomNumber = new Random((int)DateTime.Now.Millisecond); // create a random number object
-
-        /// <summary>
-        /// Creates a player after verifying that the player does not already exist. returns the player obj
-        /// </summary>
-        /// <returns></returns>
-        // public Customer CreateCustomer(string fName = "null")
-        // {
-        //     Customer p1 = new Customer();
-        //     p1 = Customers.Where(x => x.Fname == fName).FirstOrDefault();
-
-        //     if (p1 == null)
-        //     {
-        //         p1 = new Customer()
-        //         {
-        //             Fname = fName,
-        //             Lname = lName
-        //         };
-        //         Customers.Add(p1);
-        //     }
-        //     return p1;
-        // }
 
         public bool CreateCustomer(Customer customer)
         {
@@ -53,15 +22,6 @@ namespace PizzaBox.Domain.Models
             return true;
         }
 
-        public bool Save()
-        {
-            int i = 0;
-            using (var db = new DbContextClass())
-            {
-                i = db.SaveChanges();
-            }
-            return i > 0;
-        }
 
         public bool Login(string username, string password, out Customer customer)
         {
@@ -339,5 +299,66 @@ namespace PizzaBox.Domain.Models
                 return db.SaveChanges() > 0;
             }
         }
+
+        /* #endregion */
+        public Dictionary<Customer, List<Order>> GetAllFinishedOrders()
+        {
+            // customerOrders = new Dictionary<Customer, List<Order>>();
+            Dictionary<Customer, List<Order>> os = new Dictionary<Customer, List<Order>>();
+            using (var db = new DbContextClass())
+            {
+                // db.Orders.EntityType.GetProperty("CustomerId").;
+                db.Customers.Include(c => c.FinishedOrders).ToList().ForEach(c =>
+                  {
+                      //   Console.WriteLine("customer? " + c.Username);
+                      if (c.FinishedOrders.Count > 0)
+                      {
+                          foreach (var order in c.FinishedOrders)
+                          {
+                              db.Entry(order).Reference(o => o.Store).Load();
+                              db.Entry(order).Collection(o => o.Pizzas).Load();
+                              order.Pizzas.ForEach(
+                                  pizza =>
+                                  {
+                                      db.Entry(pizza).Reference(p => p.PizzaCrust).Load();
+                                      db.Entry(pizza).Reference(p => p.PizzaSize).Load();
+                                      db.Entry(pizza).Collection(p => p.ToppingList).Load();
+                                  }
+                              );
+                              //       Console.WriteLine("order? " + order);
+                          }
+                      }
+                      //   Console.WriteLine(c.FinishedOrders);
+                      os.Add(c, c.FinishedOrders);
+                  });
+                return os;
+
+                // orders = db.Database.ExecuteSqlRaw("SELECT * FROM dbo.Orders WHERE CustomerId NOT null");
+                // db.Orders.Where(o=>o.Property());
+            }
+        }
+
+        // public Dictionary<Customer, List<Order>> GetPizzaRevenue(Dictionary<Customer, List<Order>> customerOrders)
+        // {
+        //     if (customerOrders.Count <= 0)
+        //     {
+        //         customerOrders = GetAllFinishedOrders();
+        //     }
+        //     List<APizza> pizzas = new List<APizza>();
+        //     foreach (var pair in customerOrders)
+        //     {
+        //         pair.Value.ForEach(o =>
+        //         {
+        //             pizzas.AddRange(o.Pizzas);
+        //         });
+        //     }
+        //     using (var db = new DbContextClass())
+        //     {
+        //         foreach (var pair in customerOrders)
+        //         {
+
+        //         }
+        //     }
+        // }
     }
 }
