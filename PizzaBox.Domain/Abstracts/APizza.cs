@@ -58,8 +58,9 @@ namespace PizzaBox.Domain.Abstracts
             foreach (var topType in DefaultToppings)
             {
                 // System.Console.WriteLine("topType:" + topType);
-                float price = PriceManager.Instance.getPrice(topType);
-                ToppingList.Add(new Topping(topType) { Price = price });
+                // float price = PriceManager.Instance.getPrice(topType);
+                // ToppingList.Add(new Topping(topType) { Price = price });
+                ToppingList.Add(new Topping(topType));
 
                 // foreach (var toppingObject in toppingPriceList)
                 // {
@@ -75,14 +76,16 @@ namespace PizzaBox.Domain.Abstracts
 
         public void AddDefaultCrust()
         {
-            float price = PriceManager.Instance.getPrice(CrustType.Thick);
-            SetCrust(new Crust(CrustType.Thick) { Price = price });
+            // float price = PriceManager.Instance.getPrice(CrustType.Thick);
+            // SetCrust(new Crust(CrustType.Thick) { Price = price });
+            SetCrust(new Crust(CrustType.Thick));
         }
 
         public void AddDefaultSize()
         {
-            float price = PriceManager.Instance.getPrice(SizeType.Medium);
-            SetSize(new Size(SizeType.Medium) { Price = price });
+            // float price = PriceManager.Instance.getPrice(SizeType.Medium);
+            // SetSize(new Size(SizeType.Medium) { Price = price });
+            SetSize(new Size(SizeType.Medium));
         }
 
         public bool SetCrust(Crust crust)

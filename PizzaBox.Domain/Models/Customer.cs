@@ -72,12 +72,8 @@ namespace PizzaBox.Domain.Models
             {
                 return false;
             }
-            if (CurrentOrder == null)
-            {
-                CurrentOrder = new Order();
-                return true;
-            }
-            return false;
+            CurrentOrder = new Order();
+            return true;
         }
 
         public bool AddPizza(APizza pizza)
@@ -94,14 +90,26 @@ namespace PizzaBox.Domain.Models
             return CurrentOrder.RemovePizza(pizza);
         }
 
+        public bool AddStoreToCurrentOrder(AStore store)
+        {
+            if (HasOrderedStoreIn24Hrs(store))
+            {
+                return false;
+            }
+            CurrentOrder.Store = store;
+            return true;
+        }
+
         public bool HasOrderedStoreIn24Hrs(AStore store)
         {
             var now = DateTime.Now;
             var oneDaySpan = new TimeSpan(1, 0, 0, 0);
-            foreach (var order in FinishedOrders)
+            for (int i = 0; i < FinishedOrders.Count; i++)
             {
-                if (order.Store.GetType() == store.GetType() && Math.Abs(now.Subtract(order.date).TotalHours) < oneDaySpan.TotalHours)
+                // Console.WriteLine("order: " + FinishedOrders[i]);
+                if (FinishedOrders[i].Store.GetType() == store.GetType() && Math.Abs(now.Subtract(FinishedOrders[i].date).TotalHours) < oneDaySpan.TotalHours)
                 {
+                    Console.WriteLine("Sorry, You cannot order from the same store twice within 24 hours");
                     return true;
                 }
             }
@@ -112,10 +120,11 @@ namespace PizzaBox.Domain.Models
         {
             var now = DateTime.Now;
             var twoHrSpan = new TimeSpan(2, 0, 0);
-            foreach (var item in FinishedOrders)
+            for (int i = 0; i < FinishedOrders.Count; i++)
             {
-                if (Math.Abs(now.Subtract(item.date).TotalHours) < twoHrSpan.TotalHours)
+                if (Math.Abs(now.Subtract(FinishedOrders[i].date).TotalHours) < twoHrSpan.TotalHours)
                 {
+                    Console.WriteLine("Sorry, You cannot order twice in 2 hours");
                     return true;
                 }
             }
@@ -185,10 +194,21 @@ namespace PizzaBox.Domain.Models
         public bool ComparePass(string rawSaved, string entered)
         {
             /* Extract the bytes */
+            Console.WriteLine("saved: " + rawSaved);
             byte[] hashBytes = Convert.FromBase64String(rawSaved);
+            // lock (hashBytes) ;
             /* Get the salt */
             byte[] salt = new byte[16];
-            Array.Copy(hashBytes, 0, salt, 0, 16);
+            lock (salt)
+            {
+                lock (hashBytes)
+                {
+                    lock (this)
+                    {
+                        Array.Copy(hashBytes, 0, salt, 0, 16);
+                    }
+                }
+            }
             /* Compute the hash on the password the user entered */
             var pbkdf2 = new Rfc2898DeriveBytes(entered, salt, 100000);
             byte[] hash = pbkdf2.GetBytes(20);

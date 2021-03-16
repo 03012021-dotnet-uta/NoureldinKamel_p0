@@ -40,15 +40,15 @@ namespace PizzaBox.Domain.Singletons
             var fs = new FileStorage();
             if (Stores == null)
             {
-                Stores = new List<AStore>
-                {
-                    new FreddyStore(),
-                    new ChicagoStore(),
-                    new DetroitStore(),
-                    new NewYorkStore()
-                };
-                // Stores = fs.ReadListFromXml<AStore>(FileType.Stores).ToList();
-                fs.WriteToXml<AStore>(FileType.Stores, Stores);
+                // Stores = new List<AStore>
+                // {
+                //     new FreddyStore(),
+                //     new ChicagoStore(),
+                //     new DetroitStore(),
+                //     new NewYorkStore()
+                // };
+                Stores = fs.ReadListFromXml<AStore>(FileType.Stores).ToList();
+                // fs.WriteToXml<AStore>(FileType.Stores, Stores);
             }
 
             // WriteStoresToXml(s);

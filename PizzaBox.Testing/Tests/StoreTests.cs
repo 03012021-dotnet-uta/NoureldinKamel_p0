@@ -11,10 +11,12 @@ namespace PizzaBox.Testing.Tests
         {
             // arrange
             var sut = new ChicagoStore();
+            var store = StoreSingleton.Instance.GetAllStores().Find(store => store.Name == "Chicago's Pizza Store");
+
             var expected = "Chicago's Pizza Store";
 
             // act -- part that we want to test
-            var actual = sut.Name;
+            var actual = store.Name;
 
             // assert
             Assert.Equal(expected, actual);

@@ -51,7 +51,12 @@ namespace PizzaBox.Domain.Models
 
         public bool RemovePizza(APizza pizza)
         {
-            return Pizzas.Remove(pizza);
+            if (Pizzas.Remove(pizza))
+            {
+                TotalPrice -= pizza.CalculateTotalPrice();
+                return true;
+            }
+            return false;
         }
 
 
@@ -114,7 +119,7 @@ namespace PizzaBox.Domain.Models
 
         public override string ToString()
         {
-            string s = "\tOrder contains:\n";
+            string s = "\tOrder from " + Store + " containing:\n";
             // string s = "[$=======================================$]\nOrder contains:";
             // float total = 0;
             foreach (APizza item in Pizzas)

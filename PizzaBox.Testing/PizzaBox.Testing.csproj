@@ -19,6 +19,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <PropertyGroup>
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\PizzaBox.Domain\PizzaBox.Domain.csproj" />
   </ItemGroup>
