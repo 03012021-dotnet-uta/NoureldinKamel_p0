@@ -16,5 +16,10 @@ namespace PizzaBox.Domain.Models
         public Size(SizeType type) : base(type)
         {
         }
+        public Size(Size size)
+        {
+            this.Type = size.Type;
+            this.Price = size.Price;
+        }
     }
 }

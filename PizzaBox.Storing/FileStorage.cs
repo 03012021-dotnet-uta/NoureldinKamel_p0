@@ -16,6 +16,7 @@ namespace PizzaBox.Storing
         private readonly string _crustFilePath = @"crust.xml";
         private readonly string _storeFilePath = @"store.xml";
         private readonly string _pizzaFilePath = @"pizza.xml";
+
         public void WriteToXml<T>(FileType fileType, List<T> data) where T : class
         {
             string path = GetPath(fileType);

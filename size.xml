@@ -2,18 +2,18 @@
 <ArrayOfDictEntryOfSizeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DictEntryOfSizeType>
     <Key>Small</Key>
-    <Value>2.5</Value>
+    <Value>5</Value>
   </DictEntryOfSizeType>
   <DictEntryOfSizeType>
     <Key>Medium</Key>
-    <Value>5.5</Value>
+    <Value>7</Value>
   </DictEntryOfSizeType>
   <DictEntryOfSizeType>
     <Key>Large</Key>
-    <Value>6.5</Value>
+    <Value>10</Value>
   </DictEntryOfSizeType>
   <DictEntryOfSizeType>
     <Key>Xlarge</Key>
-    <Value>7</Value>
+    <Value>12.5</Value>
   </DictEntryOfSizeType>
 </ArrayOfDictEntryOfSizeType>

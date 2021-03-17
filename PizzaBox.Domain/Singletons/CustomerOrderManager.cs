@@ -274,11 +274,18 @@ namespace PizzaBox.Domain.Singletons
             if (input == 1)
             {
                 Order o = CurrentCustomer.CurrentOrder;
+                if (!new PizzaBoxRepositoryLayer().SaveCustomerChanges(CurrentCustomer))
+                {
+                    PrintInfo("!! There was a problem checking out your order. Please try again !!");
+                    end = false;
+                    return;
+                }
                 CurrentCustomer.Checkout();
                 if (!new PizzaBoxRepositoryLayer().CheckoutCustomer(CurrentCustomer, o))
                 {
                     PrintInfo("!! There was a problem checking out your order. Please try again !!");
                     end = false;
+                    return;
                 }
                 PrintThankYouMessage(o);
                 end = true;
@@ -313,16 +320,17 @@ namespace PizzaBox.Domain.Singletons
             // Console.WriteLine("showPizzas.Count: " + showPizzas.Count);
             // Console.WriteLine("input: " + input);
             var realPizza = GetRealPizza(showPizzas[--input]);
-            bool added = CurrentCustomer.AddPizza(realPizza);
-            if (!added)
+            bool cancel = false;
+            bool added = CurrentCustomer.AddPizza(realPizza, out cancel);
+            if (!added && !cancel)
             {
                 do
                 {
                     CustomizePizza(realPizza);
-                    added = CurrentCustomer.AddPizza(realPizza);
+                    added = CurrentCustomer.AddPizza(realPizza, out cancel);
                 } while (!added);
             }
-            else
+            else if (!cancel)
             {
                 CustomizePizza(realPizza);
             }
@@ -400,7 +408,8 @@ namespace PizzaBox.Domain.Singletons
             {
                 return pizza;
             }
-            pizza.SetCrust(crustList[--input]);
+            new PizzaBoxRepositoryLayer().RemoveCrustFromDBPizza(CurrentCustomer.CurrentOrder, pizza, pizza.PizzaCrust);
+            pizza.SetCrust(new Crust(crustList[--input]));
             return pizza;
         }
 
@@ -414,7 +423,8 @@ namespace PizzaBox.Domain.Singletons
             {
                 return pizza;
             }
-            pizza.SetSize(sizeList[--input]);
+            new PizzaBoxRepositoryLayer().RemoveSizeFromDBPizza(CurrentCustomer.CurrentOrder, pizza, pizza.PizzaSize);
+            pizza.SetSize(new Size(sizeList[--input]));
             return pizza;
         }
 
@@ -471,7 +481,12 @@ namespace PizzaBox.Domain.Singletons
             {
                 return pizza;
             }
-            pizza.RemoveTopping(toppingList[--input]);
+            if (!new PizzaBoxRepositoryLayer().RemoveToppingFromDBPizza(CurrentCustomer.CurrentOrder, pizza, toppingList[--input]))
+            {
+                PrintInfo("{!!} an error occurred couldn't remove the topping: " + toppingList[input] + " {!!}");
+                return pizza;
+            }
+            pizza.RemoveTopping(toppingList[input]);
             return pizza;
         }
 
@@ -667,14 +682,16 @@ namespace PizzaBox.Domain.Singletons
         public List<AStore> GetAvailableStores()
         {
             var stores = StoreSingleton.Instance.GetAllStores();
+            var returnList = new List<AStore>();
             foreach (var store in stores)
             {
-                if (CurrentCustomer.HasOrderedStoreIn24Hrs(store))
+                if (!CurrentCustomer.HasOrderedStoreIn24Hrs(store))
                 {
-                    stores.Remove(store);
+                    // stores.Remove(store);
+                    returnList.Add(store);
                 }
             }
-            return stores;
+            return returnList;
         }
 
         public List<APizza> GetAllPizzas()

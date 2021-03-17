@@ -74,9 +74,9 @@ namespace PizzaBox.Domain.Singletons
             _crustPriceDictionary = storage.ReadFromXml<CrustType>(FileType.Crusts);
             _sizePriceDictionary = storage.ReadFromXml<SizeType>(FileType.Sizes);
 
-            storage.WriteToXml<ToppingType>(FileType.Toppings, _toppingPriceDictionary);
-            storage.WriteToXml<CrustType>(FileType.Crusts, _crustPriceDictionary);
-            storage.WriteToXml<SizeType>(FileType.Sizes, _sizePriceDictionary);
+            // storage.WriteToXml<ToppingType>(FileType.Toppings, _toppingPriceDictionary);
+            // storage.WriteToXml<CrustType>(FileType.Crusts, _crustPriceDictionary);
+            // storage.WriteToXml<SizeType>(FileType.Sizes, _sizePriceDictionary);
         }
 
         public float getPrice(Enum enumType)

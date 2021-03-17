@@ -16,5 +16,11 @@ namespace PizzaBox.Domain.Models
         public Crust(CrustType type) : base(type)
         {
         }
+
+        public Crust(Crust crust)
+        {
+            this.Type = crust.Type;
+            this.Price = crust.Price;
+        }
     }
 }
