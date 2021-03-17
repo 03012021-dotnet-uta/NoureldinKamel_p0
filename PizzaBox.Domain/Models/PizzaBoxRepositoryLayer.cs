@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PizzaBox.Domain.Models
 {
-    /* #region Customer Methods */
     public class PizzaBoxRepositoryLayer
     {
+        /* #region Customer Methods */
 
         public bool CreateCustomer(Customer customer)
         {
@@ -21,7 +21,6 @@ namespace PizzaBox.Domain.Models
             }
             return true;
         }
-
 
         public bool Login(string username, string password, out Customer customer)
         {
@@ -208,6 +207,7 @@ namespace PizzaBox.Domain.Models
                             }
                         }
                     });
+
                     db.SaveChanges();
                 }
                 // try
@@ -273,6 +273,82 @@ namespace PizzaBox.Domain.Models
             }
         }
 
+
+        public bool RemoveToppingFromDBPizza(Order order, APizza pizza, Topping topping)
+        {
+            using (var db = new DbContextClass())
+            {
+                if (!db.Orders.Contains(order))
+                {
+                    return true;
+                }
+                if (!db.Pizzas.Contains(pizza))
+                {
+                    return true;
+                }
+                // if (component.GetType() == Topping.GetType())
+                // {
+                // Console.WriteLine("remove a topping");
+                if (!db.Toppings.Contains(topping))
+                {
+                    return true;
+                }
+                // }
+                db.Toppings.Remove(topping);
+                return db.SaveChanges() > 0;
+            }
+        }
+
+        public bool RemoveCrustFromDBPizza(Order order, APizza pizza, Crust crust)
+        {
+            using (var db = new DbContextClass())
+            {
+                if (!db.Orders.Contains(order))
+                {
+                    return true;
+                }
+                if (!db.Pizzas.Contains(pizza))
+                {
+                    return true;
+                }
+                // if (component.GetType() == Topping.GetType())
+                // {
+                // Console.WriteLine("remove a topping");
+                if (!db.Crusts.Contains(crust))
+                {
+                    return true;
+                }
+                // }
+                db.Crusts.Remove(crust);
+                return db.SaveChanges() > 0;
+            }
+        }
+
+        public bool RemoveSizeFromDBPizza(Order order, APizza pizza, Size size)
+        {
+            using (var db = new DbContextClass())
+            {
+                if (!db.Orders.Contains(order))
+                {
+                    return true;
+                }
+                if (!db.Pizzas.Contains(pizza))
+                {
+                    return true;
+                }
+                // if (component.GetType() == size.GetType())
+                // {
+                // Console.WriteLine("remove a size");
+                if (!db.Sizes.Contains(size))
+                {
+                    return true;
+                }
+                // }
+                db.Sizes.Remove(size);
+                return db.SaveChanges() > 0;
+            }
+        }
+
         public bool CheckoutCustomer(Customer customer, Order order)
         {
             using (var db = new DbContextClass())
@@ -281,10 +357,13 @@ namespace PizzaBox.Domain.Models
                 order.date = DateTime.Now;
                 if (db.Orders.Contains(order))
                 {
+                    db.Remove(order);
                     db.Update(customer);
-                    db.Database.ExecuteSqlRaw("UPDATE dbo.Customers SET CurrentOrderOrderId = null WHERE CustomerId = '" + customer.CustomerId + "'");
-                    Console.WriteLine("change? :" + db.SaveChanges());
+                    // db.Database.ExecuteSqlRaw("UPDATE dbo.Customers SET CurrentOrderOrderId = null WHERE CustomerId = '" + customer.CustomerId + "'");
+                    db.SaveChanges();
+                    // Console.WriteLine("change? :" + );
                 }
+                db.Add(order);
                 customer.FinishedOrders.Add(order);
                 db.Update(customer);
                 return db.SaveChanges() > 0;
@@ -301,6 +380,9 @@ namespace PizzaBox.Domain.Models
         }
 
         /* #endregion */
+
+        /* #region Store Methods */
+
         public Dictionary<Customer, List<Order>> GetAllFinishedOrders()
         {
             // customerOrders = new Dictionary<Customer, List<Order>>();
@@ -360,5 +442,7 @@ namespace PizzaBox.Domain.Models
         //         }
         //     }
         // }
+
+        /* #endregion */
     }
 }

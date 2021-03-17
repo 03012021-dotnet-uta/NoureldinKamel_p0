@@ -76,13 +76,14 @@ namespace PizzaBox.Domain.Models
             return true;
         }
 
-        public bool AddPizza(APizza pizza)
+        public bool AddPizza(APizza pizza, out bool cancel)
         {
             if (!IsOrderOk())
             {
+                cancel = true;
                 return false;
             }
-            return CurrentOrder.AddPizza(pizza);
+            return CurrentOrder.AddPizza(pizza, out cancel);
         }
 
         public bool RemovePizza(APizza pizza)
@@ -107,9 +108,9 @@ namespace PizzaBox.Domain.Models
             for (int i = 0; i < FinishedOrders.Count; i++)
             {
                 // Console.WriteLine("order: " + FinishedOrders[i]);
-                if (FinishedOrders[i].Store.GetType() == store.GetType() && Math.Abs(now.Subtract(FinishedOrders[i].date).TotalHours) < oneDaySpan.TotalHours)
+                if (FinishedOrders[i].Store.Name == store.Name && Math.Abs(now.Subtract(FinishedOrders[i].date).TotalHours) < oneDaySpan.TotalHours)
                 {
-                    Console.WriteLine("Sorry, You cannot order from the same store twice within 24 hours");
+                    // Console.WriteLine("Sorry, You cannot order from the same store twice within 24 hours");
                     return true;
                 }
             }
@@ -194,7 +195,7 @@ namespace PizzaBox.Domain.Models
         public bool ComparePass(string rawSaved, string entered)
         {
             /* Extract the bytes */
-            Console.WriteLine("saved: " + rawSaved);
+            // Console.WriteLine("saved: " + rawSaved);
             byte[] hashBytes = Convert.FromBase64String(rawSaved);
             // lock (hashBytes) ;
             /* Get the salt */

@@ -35,10 +35,11 @@ namespace PizzaBox.Domain.Models
             return Pizzas;
         }
 
-        public bool AddPizza(APizza pizza)
+        public bool AddPizza(APizza pizza, out bool cancel)
         {
             if (!(IsBelowMaxPrice(pizza.CalculateTotalPrice()) && IsBelowMaxPizzas(1) && IsPizzaToppingsOk(pizza)))
             {
+                cancel = true;
                 return false;
             }
 
@@ -46,6 +47,7 @@ namespace PizzaBox.Domain.Models
 
             TotalPrice += pizza.CalculateTotalPrice();
             date = DateTime.Now;
+            cancel = false;
             return true;
         }
 

@@ -2,18 +2,18 @@
 <ArrayOfDictEntryOfCrustType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DictEntryOfCrustType>
     <Key>Pan</Key>
-    <Value>1.7</Value>
+    <Value>3</Value>
   </DictEntryOfCrustType>
   <DictEntryOfCrustType>
     <Key>Thick</Key>
-    <Value>1.5</Value>
+    <Value>2.5</Value>
   </DictEntryOfCrustType>
   <DictEntryOfCrustType>
     <Key>Thin</Key>
-    <Value>1</Value>
+    <Value>2</Value>
   </DictEntryOfCrustType>
   <DictEntryOfCrustType>
     <Key>Stuffed</Key>
-    <Value>2.1</Value>
+    <Value>5</Value>
   </DictEntryOfCrustType>
 </ArrayOfDictEntryOfCrustType>

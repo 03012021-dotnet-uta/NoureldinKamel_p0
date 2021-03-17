@@ -22,9 +22,25 @@ namespace PizzaBox.Testing.Tests
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public void Test_StoreCount()
+        {
+            // arrange
+            // var sut = new ChicagoStore();
+            var store = StoreSingleton.Instance.GetAllStores();
+
+            var expected = 4;
+
+            // act -- part that we want to test
+            var actual = store.Count;
+
+            // assert
+            Assert.Equal(expected, actual);
+        }
+
         [Theory]
-        [InlineData("Chicago's Pizza Store")]
-        public void Test_ChicagoStore1(string expected)
+        [InlineData(null)]
+        public void Test_ChicagoStoreNotInFile(string expected)
         {
             // arrange
             var sut = new ChicagoStore();

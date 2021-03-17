@@ -2,38 +2,38 @@
 <ArrayOfDictEntryOfToppingType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DictEntryOfToppingType>
     <Key>Mozirilla</Key>
-    <Value>0.3</Value>
+    <Value>3.5</Value>
   </DictEntryOfToppingType>
   <DictEntryOfToppingType>
     <Key>Mushroom</Key>
-    <Value>0.3</Value>
+    <Value>1</Value>
   </DictEntryOfToppingType>
   <DictEntryOfToppingType>
     <Key>Onion</Key>
-    <Value>0.3</Value>
+    <Value>1</Value>
   </DictEntryOfToppingType>
   <DictEntryOfToppingType>
     <Key>Pepperoni</Key>
-    <Value>0.3</Value>
+    <Value>4</Value>
   </DictEntryOfToppingType>
   <DictEntryOfToppingType>
     <Key>Pineapple</Key>
-    <Value>0.3</Value>
+    <Value>3</Value>
   </DictEntryOfToppingType>
   <DictEntryOfToppingType>
     <Key>ShedarCheese</Key>
-    <Value>0.3</Value>
+    <Value>2.5</Value>
   </DictEntryOfToppingType>
   <DictEntryOfToppingType>
     <Key>Tomatoes</Key>
-    <Value>0.3</Value>
+    <Value>1</Value>
   </DictEntryOfToppingType>
   <DictEntryOfToppingType>
     <Key>Meat</Key>
-    <Value>0.6</Value>
+    <Value>6</Value>
   </DictEntryOfToppingType>
   <DictEntryOfToppingType>
     <Key>Chicken</Key>
-    <Value>0.6</Value>
+    <Value>5.5</Value>
   </DictEntryOfToppingType>
 </ArrayOfDictEntryOfToppingType>

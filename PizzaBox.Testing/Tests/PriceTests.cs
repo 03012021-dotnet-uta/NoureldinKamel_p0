@@ -6,48 +6,61 @@ namespace PizzaBox.Testing.Tests
 {
     public class PriceTests
     {
-        [Fact]
-        public void Test_CrustTypePan()
+        [Theory]
+        [InlineData(3, CrustType.Pan)]
+        [InlineData(2.5, CrustType.Thick)]
+        [InlineData(2, CrustType.Thin)]
+        [InlineData(5, CrustType.Stuffed)]
+        public void Test_CrustTypePan(float expected, CrustType type)
         {
             // arrange
-            var sut = PriceManager.Instance;
+            var sut = new Crust(type);
 
-            var expected = 1.7F;
+            // var expected = 1.7F;
 
             // act -- part that we want to test
-            var actual = sut.getPrice(CrustType.Pan);
+            // var actual = sut.getPrice(CrustType.Pan);
+            var actual = sut.Price;
 
             // assert
             Assert.Equal(expected, actual);
         }
 
 
-        [Fact]
-        public void Test_ToppingType()
+        [Theory]
+        [InlineData(5.5, ToppingType.Chicken)]
+        [InlineData(6, ToppingType.Meat)]
+        [InlineData(3.5, ToppingType.Mozirilla)]
+        [InlineData(1, ToppingType.Onion)]
+        public void Test_ToppingType(float expected, ToppingType type)
         {
             // arrange
-            var sut = PriceManager.Instance;
+            var sut = new Topping(type);
 
-            var expected = 0.6F;
+            // var expected = 0.6F;
 
             // act -- part that we want to test
-            var actual = sut.getPrice(ToppingType.Chicken);
+            var actual = sut.Price;
 
             // assert
             Assert.Equal(expected, actual);
         }
 
 
-        [Fact]
-        public void Test_SizeType()
+        [Theory]
+        [InlineData(10, SizeType.Large)]
+        [InlineData(7, SizeType.Medium)]
+        [InlineData(5, SizeType.Small)]
+        [InlineData(12.5, SizeType.Xlarge)]
+        public void Test_SizeType(float expected, SizeType type)
         {
             // arrange
-            var sut = PriceManager.Instance;
+            var sut = new Size(type);
 
-            var expected = 7.0F;
+            // var expected = 7.0F;
 
             // act -- part that we want to test
-            var actual = sut.getPrice(SizeType.Xlarge);
+            var actual = sut.Price;
 
             // assert
             Assert.Equal(expected, actual);
