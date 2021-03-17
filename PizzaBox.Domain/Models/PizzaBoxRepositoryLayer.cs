@@ -74,7 +74,7 @@ namespace PizzaBox.Domain.Models
                 // }
                 catch (System.Exception e)
                 {
-                    Console.WriteLine("customer not found" + e.Message + "\n" + e.StackTrace);
+                    // Console.WriteLine("customer not found" + e.Message + "\n" + e.StackTrace);
                     customer = null;
                     return false;
                 }
@@ -229,11 +229,11 @@ namespace PizzaBox.Domain.Models
                 {
                     // db.Orders.Add(customer.CurrentOrder);
                     // db.Update(customer);
-                    Console.WriteLine("an error occurred while saving your changes: " + e.Message + "\n" + e.StackTrace);
+                    // Console.WriteLine("an error occurred while saving your changes: " + e.Message + "\n" + e.StackTrace);
                 }
                 catch (System.InvalidOperationException e)
                 {
-                    Console.WriteLine("an error occurred while saving your changes: " + e.Message + "\n" + e.StackTrace);
+                    // Console.WriteLine("an error occurred while saving your changes: " + e.Message + "\n" + e.StackTrace);
                 }
                 return db.SaveChanges() > 0;
 
