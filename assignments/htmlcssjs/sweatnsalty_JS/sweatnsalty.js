@@ -2,7 +2,7 @@
 // initializing variables
 let sweet = "sweet";
 let salty = "salty";
-let sweetnsalty = "sweetnsalty";
+let sweetnsalty = "sweet’nSalty";
 
 let sweetNum = 3;
 let saltyNum = 5;
@@ -16,24 +16,7 @@ let printsPerLine = 10;
 let startNum = 0;
 let endNum = 1000;
 
-// /** create a check */
-// function checkNumber(num, print) {
-//   this.checkNum = num;
-//   this.checkPrint = print;
-
-//   function check(n) {
-//     if (n % this.checkNum == 0) {
-//       return print;
-//     }
-//     return n;
-//   }
-// }
-
-// // creating the check for each case
-// let sweetCheck = checkNumber(sweetNum, sweet);
-// let saltyCheck = checkNumber(saltyNum, salty);
-// let sweetnsaltyCheck = checkNumber(sweetnsaltyNum, sweetnsalty);
-
+// run the whole program
 function runSweetnSalty(start, end, printsPerLine) {
   let sweetCounter = 0;
   let saltyCounter = 0;
@@ -66,15 +49,19 @@ function runSweetnSalty(start, end, printsPerLine) {
     }
   }
 
+  // writing the whole sweet, salty, sweetnsalty results
   console.log(printString);
 
+  // writing how many sweets, saltys and sweetnsaltys
   printResult(sweet, sweetCounter);
   printResult(salty, saltyCounter);
   printResult(sweetnsalty, sweetnsaltyCounter);
 }
 
+// method for printing the result
 function printResult(printString, counter) {
   console.log("the number of " + printString + " printed are: " + counter);
 }
 
+// invoke running the program
 runSweetnSalty(startNum, endNum, printsPerLine);
