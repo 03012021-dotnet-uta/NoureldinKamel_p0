@@ -1,0 +1,146 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Free Web tutorials" />
+    <meta name="keywords" content="HTML, CSS, JavaScript" />
+    <meta name="author" content="John Doe" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Trial</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section class="section">
+      <div class="image-container">
+        <img
+          src="260px-HTML5_logo_and_wordmark.svg.png"
+          alt="HTML5"
+          class="image"
+        />
+        <h1 class="title">About</h1>
+        <p class="description">Some Text About this website</p>
+      </div>
+    </section>
+    <section class="section">
+      <h2>Our Locations</h2>
+      <ul>
+        <li>
+          <p class="list-title">USA</p>
+          <ul>
+            <div class="link-holder">
+              <li><a href="#">New York</a></li>
+            </div>
+            <br />
+            <div class="link-holder">
+              <li><a href="#">Colombus</a></li>
+            </div>
+            <br />
+            <div class="link-holder">
+              <li><a href="#">Austin</a></li>
+            </div>
+            <br />
+            <div class="link-holder">
+              <li><a href="#">Philly</a></li>
+            </div>
+            <br />
+          </ul>
+        </li>
+        <li>
+          <p class="list-title">World</p>
+          <ul>
+            <div class="link-holder">
+              <li><a href="#">Ottwa</a></li>
+            </div>
+            <br />
+            <div class="link-holder">
+              <li><a href="#">Sydney</a></li>
+            </div>
+            <br />
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Upcoming Class</h2>
+      <table class="table">
+        <tr>
+          <th>Location</th>
+          <th>Topic</th>
+        </tr>
+        <tr>
+          <td>New York</td>
+          <td>Javascript & jQuery</td>
+        </tr>
+        <tr>
+          <td>San Fransisco</td>
+          <td>HTML & Css</td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="section blue-bg">
+      <h2>Sign up!</h2>
+      <form>
+        <label>Name: </label><input type="text" /><br />
+        <label>Email: </label><input type="text" /><br />
+        <label for="select-menu">Location</label>
+        <div class="select-container">
+            <select id="select-menu">
+              <option value="””">New York</option>
+              <option value="””">Colombia</option>
+              <option value="””">Austin</option>
+              <option value="””">Syndey</option>
+            </select>
+        </div>
+        <fieldset>
+          <legend>Gender</legend>
+          <br />
+          <input
+            class="radio-input"
+            type="radio"
+            id="male"
+            name="gender"
+            value="male"
+          />
+          <label for="male">Male</label><br />
+          <input
+            class="radio-input"
+            type="radio"
+            id="female"
+            name="gender"
+            value="female"
+          />
+          <label for="female">Female</label><br />
+          <input
+            class="radio-input"
+            type="radio"
+            id="other"
+            name="gender"
+            value="other"
+          />
+          <label for="other">Other</label><br />
+        </fieldset>
+        <p class="label">Experience:</p><br>
+        <textarea rows="5" cols="40"></textarea><br />
+        <div class="button-container"><button>Sign Up!</button></div>
+      </form>
+    </section>
+
+    <section class="section">
+        <p>
+          <div class="link-holder"><a href="www.twitter.com">Twitter</a></div>
+          <div class="link-holder"><a href="www.facebook.com">Facebook</a></div>
+          <div class="link-holder"><a href="www.flickr.com">Flickr</a></div>
+        </p>
+    </section>
+
+    <ul>
+    </ul>
+    <script src="index.js"></script>
+  </body>
+</html>
