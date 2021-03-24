@@ -16,10 +16,6 @@
         text-align: center;
         color: white;
       }
-
-      .hidden {
-        display: none;
-      }
     </style>
   </head>
   <body>
@@ -51,6 +47,20 @@
 
       // get the form object
       formObj = document.querySelector("#sweetnsalty-form");
+
+      // get the reset button
+      resetButton = document.querySelector("#reset-button");
+      // originally hidden
+      resetButton.setAttribute("style", "display:none");
+
+      // grabbing the element that will have
+      // all the outputs and numbers
+      outputDiv = document.getElementById("output-div");
+
+      // grabbing the element that will have
+      // all the results of sweets, saltys and sweetnsaltys
+      resultsDiv = document.getElementById("results-div");
+
       formObj.addEventListener("submit", (event) => {
         event.preventDefault();
 
@@ -69,6 +79,8 @@
         runSweetnSalty(startNum, endNum, printsPerLine);
         // hide the form
         formObj.setAttribute("style", "display:none");
+        // show the reset button
+        resetButton.setAttribute("style", "display:normal");
       });
 
       /** validating inputs */
@@ -113,22 +125,19 @@
         }
       });
 
-      // grabbing the element that will have
-      // all the outputs and numbers
-      outputDiv = document.getElementById("output-div");
-
-      // grabbing the element that will have
-      // all the results of sweets, saltys and sweetnsaltys
-      resultsDiv = document.getElementById("results-div");
-
       // add an event listener to reset the form and re show it
       // also reset the results and the output
-      resetButton = document.querySelector("#reset-button");
       resetButton.addEventListener("click", (event) => {
+        // show the form and reset it
         formObj.setAttribute("style", "display:static");
         formObj.reset();
+
+        // reset the results and the outputdivs
         outputDiv.innerHTML = "";
         resultsDiv.innerHTML = "";
+
+        // hide the button after reseting
+        resetButton.setAttribute("style", "display:none");
       });
 
       // run the sweet n salty print
