@@ -6,12 +6,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SweetnSalty</title>
     <style>
+      body,
+      html,
+      div {
+        width: 100%;
+      }
+
       * {
         font-family: "Open Sans", sans-serif;
         font-size: 12pt;
       }
 
+      p,
+      div,
+      label {
+        transition: 0.5s;
+      }
+
+      p:hover,
+      /* div:hover, */
+      label:hover {
+        background-color: blue;
+        color: white;
+        padding: 8pt;
+      }
+
+      button,
+      .submit-btn {
+        transition: 0.5s;
+      }
+
+      button:hover,
+      .submit-btn:hover {
+        color: darkolivegreen;
+        background-color: greenyellow;
+        border: none;
+        padding: 8pt;
+      }
+
+      input:focus {
+        background-color: lime;
+      }
+
       h1 {
+        font-size: 25pt;
+      }
+
+      h2 {
+        font-size: 18;
+      }
+
+      form {
+        background-color: aqua;
+        padding: 8pt;
       }
 
       #output-div {
@@ -47,7 +94,7 @@
       <input name="end" type="number" required /><br />
       <label for="wordCount">Please enter the words per line</label>
       <input name="wordCount" type="number" required /><br />
-      <input type="submit" value="Start" /><br />
+      <input class="submit-btn" type="submit" value="Start" /><br />
     </form>
     <button id="reset-button">Reset</button>
     <div>
@@ -212,7 +259,7 @@
           }
           // else just add the number, add number
           else {
-            outputDiv.appendChild(getPrintSpan(counter));
+            outputDiv.appendChild(getPrintSpan(counter.toLocaleString()));
           }
         }
 
