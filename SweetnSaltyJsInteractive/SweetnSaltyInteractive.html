@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SweetnSalty</title>
     <style>
+      * {
+        font-family: "Open Sans", sans-serif;
+        font-size: 12pt;
+      }
+
+      h1 {
+      }
+
       #output-div {
         background-color: aqua;
         text-align: center;
@@ -20,6 +28,18 @@
   </head>
   <body>
     <h1>Welcome to SweetnSalty</h1>
+    <p>This is the sweet and salty game.</p>
+    <p>
+      You will need to enter 3 numbers the starting and the end, and numbers per
+      line, And the program run through the range between the start and the end.
+      Whenever the program encounters a number divisible by 3, it prints sweet,
+      and when it encounters a number divisible by 5 it prints salty, or both,
+      prints sweet'nSalty. Otherwise it prints the number. There are some rules
+      though. The range between both numbers must be no less than 200, and no
+      greater than 10000. And the words per line should be at least 1/100th of
+      the range.
+    </p>
+    <p>Enjoy!</p>
     <form id="sweetnsalty-form" action="">
       <label for="start">Please enter the starting number</label>
       <input name="start" type="number" required /><br />
