@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SweetnSalty</title>
+    <style>
+      #output-div {
+        background-color: aqua;
+        text-align: center;
+      }
+
+      #results-div {
+        background-color: tomato;
+        text-align: center;
+        color: white;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to SweetnSalty</h1>
+    <form id="sweetnsalty-form" action="">
+      <label for="start">Please enter the starting number</label>
+      <input name="start" type="number" required /><br />
+      <label for="end">Please enter the ending number</label>
+      <input name="end" type="number" required /><br />
+      <label for="wordCount">Please enter the words per line</label>
+      <input name="wordCount" type="number" required /><br />
+      <input type="submit" value="Start" /><br />
+    </form>
+    <button id="reset-button">Reset</button>
+    <div>
+      <h2>Output</h2>
+      <div id="output-div"></div>
+      <h2>Results</h2>
+      <div id="results-div"></div>
+    </div>
+    <script>
+      // initialize
+      // start value
+      let startNum = 0;
+      // end value
+      let endNum = 0;
+      // words per line value
+      let printsPerLine = 0;
+
+      // get the form object
+      formObj = document.querySelector("#sweetnsalty-form");
+      formObj.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        // determine the words allowed per line
+        let printsPerLine = parseInt(formObj.wordCount.value);
+
+        // set the start and the end counters
+        let startNum = parseInt(formObj.start.value);
+        let endNum = parseInt(formObj.end.value);
+
+        // check the values
+        console.log("startNum: " + startNum);
+        console.log("endNum: " + endNum);
+        console.log("printsPerLine: " + printsPerLine);
+
+        runSweetnSalty(startNum, endNum, printsPerLine);
+        // hide the form
+        formObj.setAttribute("style", "display:none");
+      });
+
+      /** validating inputs */
+      // if the start number is changed,
+      // set the min and max for end number
+      formObj.start.addEventListener("change", (event) => {
+        startValue = parseInt(formObj.start.value);
+        minEnd = startValue + 200;
+        maxEnd = startValue + 10000;
+        console.log("currentStart - endValue");
+        setMinMax(formObj.end, minEnd, maxEnd);
+        currentEnd = parseInt(formObj.end.value);
+        // if the end is within the boundaries,
+        // set the words per line min to be 1/100 of range
+        if (currentEnd >= minEnd && currentEnd <= maxEnd) {
+          console.log(currentEnd - startValue);
+          formObj.wordCount.setAttribute(
+            "min",
+            Math.ceil((currentEnd - startValue) / 100)
+          );
+        }
+      });
+
+      // if the start number is changed,
+      // set the min and max for end number
+      formObj.end.addEventListener("change", (event) => {
+        endValue = parseInt(formObj.end.value);
+        maxStart = endValue - 200;
+        minStart = endValue - 10000;
+        console.log("currentStart - endValue");
+        setMinMax(formObj.start, minStart, maxStart);
+        currentStart = parseInt(formObj.start.value);
+        // if the start is within the boundaries,
+        // set the words per line min to be 1/100 of range
+        console.log(currentStart - endValue);
+        if (currentStart >= minStart && currentStart <= maxStart) {
+          console.log(currentStart - endValue);
+          formObj.wordCount.setAttribute(
+            "min",
+            Math.ceil((endValue - currentStart) / 100)
+          );
+        }
+      });
+
+      // grabbing the element that will have
+      // all the outputs and numbers
+      outputDiv = document.getElementById("output-div");
+
+      // grabbing the element that will have
+      // all the results of sweets, saltys and sweetnsaltys
+      resultsDiv = document.getElementById("results-div");
+
+      // add an event listener to reset the form and re show it
+      // also reset the results and the output
+      resetButton = document.querySelector("#reset-button");
+      resetButton.addEventListener("click", (event) => {
+        formObj.setAttribute("style", "display:static");
+        formObj.reset();
+        outputDiv.innerHTML = "";
+        resultsDiv.innerHTML = "";
+      });
+
+      // run the sweet n salty print
+      function runSweetnSalty(start, end, printsPerLine) {
+        // initialize prints
+        let sweet = "sweet";
+        let salty = "salty";
+        let sweetnsalty = "sweet’nSalty";
+
+        // initialize check numbers
+        let sweetNum = 3;
+        let saltyNum = 5;
+        // 5 and 3 in one
+        let sweetnsaltyNum = 15;
+
+        // initialize counters
+        let sweetCounter = 0;
+        let saltyCounter = 0;
+        let sweetnsaltyCounter = 0;
+        outputDiv.appendChild(getPrintSpan("~~~Starting SweetnSalty~~~"));
+
+        console.log("start: " + start);
+        console.log("end: " + end);
+
+        // loop from the start till the end
+        let lineCounter = 0;
+        for (let counter = start; counter <= end; counter++) {
+          //check if the 10th number is here to add a new line
+          if (lineCounter % printsPerLine == 0) {
+            outputDiv.appendChild(getBreakLine());
+          }
+
+          // increment the words per line counter
+          lineCounter++;
+
+          // first check if divisible by both for sweatnsalty, add string and increment counter
+          if (counter % sweetnsaltyNum == 0) {
+            sweetnsaltyCounter++;
+            outputDiv.appendChild(getPrintSpan(sweetnsalty));
+          }
+          // then check if sweet, add string and increment counter
+          else if (counter % sweetNum == 0) {
+            sweetCounter++;
+
+            outputDiv.appendChild(getPrintSpan(sweet));
+          }
+          // then check if salty, add string and increment counter
+          else if (counter % saltyNum == 0) {
+            saltyCounter++;
+
+            outputDiv.appendChild(getPrintSpan(salty));
+          }
+          // else just add the number, add number
+          else {
+            outputDiv.appendChild(getPrintSpan(counter));
+          }
+        }
+
+        // writing the whole sweet, salty, sweetnsalty results
+        // console.log(printString);
+
+        // writing how many sweets, saltys and sweetnsaltys
+        printResult(sweet, sweetCounter);
+        printResult(salty, saltyCounter);
+        printResult(sweetnsalty, sweetnsaltyCounter);
+      }
+
+      // method for printing the result
+      function printResult(printString, counter) {
+        resultsDiv.appendChild(
+          getPrintSpan(
+            "The number of " + printString + " printed are: " + counter
+          )
+        );
+        resultsDiv.appendChild(getBreakLine());
+      }
+
+      // get a span with the given content and a right margin
+      function getPrintSpan(content) {
+        spanObj = document.createElement("span");
+        spanObj.setAttribute("style", "margin-right: 5pt");
+        spanObj.innerHTML = content;
+        return spanObj;
+      }
+
+      // get a break line element
+      function getBreakLine() {
+        return document.createElement("br");
+      }
+
+      // set the min and max of an html object
+      function setMinMax(inputObj, min, max) {
+        inputObj.setAttribute("min", min);
+        inputObj.setAttribute("max", max);
+      }
+
+      // invoke running the program
+      // runSweetnSalty(startNum, endNum, printsPerLine);
+    </script>
+  </body>
+</html>
